@@ -142,11 +142,6 @@ function getMousePos(evt) {
 }
 
 function handleMouseMove(event) {
-	// disable pick moving if lock is turning
-	if (!DEBUG && rightPressed) {
-		return;
-	}
-
 	// https://stackoverflow.com/questions/17130395/real-mouse-position-in-canvas
 	var pos = getMousePos(event);          // get adjusted coordinates as above
 	var matrix = ctx.getTransform();         // W3C (future)
