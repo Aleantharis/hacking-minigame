@@ -1,7 +1,7 @@
 export class Constants {
     static #canvasHeightMargin = 30;
     static get canvasHeightMargin() {
-        return this.canvasHeightMargin;
+        return this.#canvasHeightMargin;
     }
 }
 

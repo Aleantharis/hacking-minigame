@@ -1,4 +1,4 @@
-import { Constants } from "./const.js";
+import { Constants as CONST} from "./const.js";
 import { Assets } from "./const.js";
 
 const assetsLoaded = () => { alert("test"); };
@@ -20,7 +20,7 @@ resizeCanvas();
 // Attempt at auto-resize
 function resizeCanvas() {
 	canvas.width = window.innerWidth;
-	canvas.height = window.innerHeight - (document.getElementById("fMenu").offsetHeight + canvasHeightMargin);
+	canvas.height = window.innerHeight - (document.getElementById("fMenu").offsetHeight + CONST.canvasHeightMargin);
 
 	// Move coordinate origin to center of canvas
 	ctx.translate(canvas.width / 2, canvas.height / 2);
