@@ -1,7 +1,7 @@
 import { Constants as CONST} from "./const.js";
 import { Assets } from "./const.js";
 
-const assetsLoaded = () => { alert("test"); };
+const assetsLoaded = () => { document.getElementById("btnStart").disabled = false; alert("test"); };
 const assets = new Assets({
 	test: "img/test.jpg"
 }, assetsLoaded);
@@ -71,30 +71,22 @@ document.addEventListener("keyup", keyUpHandler, false);
 var touchPoints = [];
 function pointerDownHandler(event) {
 	if (event.pointerType === "mouse") {
-		rightPressed = true;
+		// handle mouseclick
 	}
 	else if (event.pointerType === "touch") {
 		touchPoints.push(event.pointerId);
-
-		if (touchPoints.length === 2) {
-			rightPressed = true;
-		}
+		// handle touch down
 	}
 }
 
 function pointerUpHandler(event) {
 	if (event.pointerType === "touch") {
 		var index = touchPoints.indexOf(event.pointerId);
-		if(index >= 0) {
-			touchPoints.splice(index, 1);
-		}
-
-		if (touchPoints.length < 2) {
-			rightPressed = false;
-		}
+		
+		// handle touch up
 	}
 	else {
-		rightPressed = false;
+		// handle mouse up
 	}
 }
 canvas.addEventListener("pointerdown", pointerDownHandler, false);
@@ -185,7 +177,7 @@ function livesInputChangeHandler(event) {
 }
 
 function renderLives() {
-	var out = "Lockpicks: " + lives;
+	var out = "Lives: " + lives;
 	document.getElementById("lblLives").innerHTML = out;
 }
 
