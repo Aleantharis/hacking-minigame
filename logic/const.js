@@ -25,8 +25,8 @@ export class Assets {
     }
 
     constructor(assets, loadedHandler) {
-        this.assets = assets;
-        this.loadedHandler = loadedHandler;
+        this.#assets = assets;
+        this.#loadedHandler = loadedHandler;
         this.#initAssets();
     }
 
