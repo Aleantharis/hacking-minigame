@@ -1,0 +1,92 @@
+body {
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+	background-color: #1a1d21;
+}
+
+.pnlMenu {
+	display: inline-block;
+}
+
+.fMenu {
+	display: flex;
+	flex-direction: row;
+	/* width: 50vw; */
+	width: 100%;
+}
+
+output {
+	user-select: none;
+}
+
+.fMenu {
+	/* flex-grow: 1; */
+	max-height: 10%;
+	margin-bottom: 10px;
+	display: inline-flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	/* margin-right: 10px; */
+	/* margin-bottom: 10px; */
+	/* flex: 1 0 auto; */
+}
+
+.cvGame {
+	flex-grow: 99;
+	width: 100%;
+	border: 1px solid white;
+	border-radius: 5px;
+	margin-bottom: 10px;
+	touch-action: none;
+}
+
+.noCrsr {
+	cursor: none;
+}
+
+.fMenu>* {
+	flex-grow: 10;
+	margin-right: 10px;
+	/* flex: 1 0 auto; */
+	margin-bottom: 10px;
+	margin-top: 10px;
+}
+
+.fMenu>label {
+	margin-right: 0px;
+}
+
+.hidden {
+	display: none;
+}
+
+select,
+input {
+	background: #00000099;
+	border: 1px solid white;
+	border-radius: 5px;
+	color: white;
+	/* padding: 10px; */
+	text-align: center;
+}
+
+label, output {
+	color: white;
+	padding: 10px;
+	text-align: center;
+}
+
+.pnlLives {
+    display: inline-flex;
+    flex-direction: column;
+    border: 1px solid white;
+    border-radius: 5px;
+    background: #00000099;
+	text-align: center;
+}
+
+.cbDebug {
+	flex-grow:1;
+}
