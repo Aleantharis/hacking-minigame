@@ -213,9 +213,11 @@ function drawIntro() {
 }
 
 function drawDialog(firstLine, secondLine, fillStyle) {
+	var sc = (1 - BOARDSCALE) / 2;
+
 	ctx.save();
 	ctx.setTransform(1, 0, 0, 1, 0, 0);
-	ctx.translate((canvas.width * ((1 - BOARDSCALE) / 2), (canvas.height * ((1 - BOARDSCALE) / 2))));
+	ctx.translate(canvas.width * sc, canvas.height * sc);
 	ctx.fillStyle = "rgba(0, 0, 0, 0.4)";
 	ctx.fillRect(0, 0, canvas.width * BOARDSCALE, canvas.height * BOARDSCALE);
 
