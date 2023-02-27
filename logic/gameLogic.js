@@ -426,6 +426,8 @@ export class GameLogic {
                 }
             }
         }
+
+        // TODO: Sanity-check, if puzzle is even possible
     }
 
     boardInteraction(x, y) {

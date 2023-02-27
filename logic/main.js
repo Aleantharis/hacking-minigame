@@ -178,21 +178,18 @@ function drawDebug() {
 function drawSuccess() {
 	draw();
 	drawTransparentOverlay();
-	// TODO: draw success window
-	if (isDialogRendered) {
-		drawDialog("HACK SUCCESSFUL", "(Click to hide overlay)", "darkgreen");
-	}
-
 
 	// HACK SUCCESSFUL
 	// (click here to hide overlay)
+	
+	if (isDialogRendered) {
+		drawDialog("HACK SUCCESSFUL", "(Click to hide overlay)", "darkgreen");
+	}
 }
 
 function drawFailure() {
 	draw();
 	drawTransparentOverlay();
-
-	// TODO: draw failure window
 
 	// HACK FAILED
 	// You triggered a trap
@@ -206,8 +203,6 @@ function drawFailure() {
 function drawIntro() {
 	drawBackground();
 	drawTransparentOverlay();
-
-	// TODO: draw intro window
 
 	drawDialog("HACKING MINIGAME", "Rotate the tiles by clicking them. Connect the two circles to succeed. Avoid red traps.", "gold")
 }
