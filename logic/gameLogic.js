@@ -221,6 +221,10 @@ class GoalTile extends Tile {
         this.gameState.goalPowered = true;
         this.printColor = "gold";
     }
+
+    getStringRepresentation() {
+        return "G";
+    }
 }
 
 class TrapTile extends Tile {
@@ -232,6 +236,10 @@ class TrapTile extends Tile {
         this.gameState.trapPowered = true;
         this.printColor = "red";
     }
+
+    getStringRepresentation() {
+        return "X";
+    }
 }
 
 class PowerTile extends Tile {
@@ -242,6 +250,10 @@ class PowerTile extends Tile {
         this.gameState.boardPowered = true;
         this.printColor = "green";
         this.power();
+    }
+
+    getStringRepresentation() {
+        return "P";
     }
 }
 

@@ -152,9 +152,9 @@ function draw() {
 			ctx.fillRect(i * tileSize, j * tileSize, tileSize, tileSize);
 
 			ctx.fillStyle = logic.circuitBoard[i][j].printColor ?? `rgb(${255 - rgbVal}, ${255 - rgbVal}, ${255 - rgbVal})`;
-			ctx.font = Math.floor(canvasMinSize * 0.05) + "px Segoe UI";
+			ctx.font = Math.floor(tileSize * 0.9) + "px Segoe UI";
 			ctx.textBaseline = "top";
-			ctx.fillText(logic.circuitBoard[i][j].getStringRepresentation(), i * tileSize, j * tileSize, tileSize);
+			ctx.fillText(logic.circuitBoard[i][j].getStringRepresentation(), (i + 0.1) * tileSize, (j + 0.1) * tileSize, tileSize * 0.9);
 		}
 	}
 	ctx.restore();
@@ -253,3 +253,4 @@ function startGame() {
 document.onpointermove = handleMouseMove;
 document.getElementById("fMenu").onsubmit = startGameHandler;
 document.getElementById("inSize").oninput = boardSizeInputChangeHandler;
+renderBoardSizeLabel();
