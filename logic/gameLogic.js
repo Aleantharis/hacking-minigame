@@ -128,8 +128,8 @@ class Tile {
     // Triggered by neighbor
     power(incomingFrom) {
         if (this.OpenEdges.indexOf(incomingFrom) > -1) {
-            this.IsPowered = true;
-            this.OpenEdges.forEach(direction => this.Neighbors[direction] !== null && !this.Neighbors[direction].IsPowered && this.Neighbors[direction].power(Directions.inverse(direction)));
+            this.IsPowered = this.gameState.boardPowered;
+            this.OpenEdges.forEach(direction => this.Neighbors[direction] !== null && this.Neighbors[direction].IsPowered !== this.gameState.boardPowered && this.Neighbors[direction].power(Directions.inverse(direction)));
         }
     }
 
@@ -232,7 +232,8 @@ class GoalTile extends Tile {
     OpenEdges = [Directions.Up, Directions.Right, Directions.Down, Directions.Left];
 
     power(incomingFrom) {
-        this.gameState.goalPowered = true;
+        this.IsPowered = this.gameState.boardPowered;
+        this.gameState.goalPowered = this.gameState.boardPowered;
     }
 
     getStringRepresentation() {
@@ -251,7 +252,8 @@ class TrapTile extends Tile {
     OpenEdges = [Directions.Up, Directions.Right, Directions.Down, Directions.Left];
 
     power(incomingFrom) {
-        this.gameState.trapPowered = true;
+        this.IsPowered = this.gameState.boardPowered;
+        this.gameState.trapPowered = this.gameState.boardPowered;
     }
 
     getStringRepresentation() {
@@ -270,8 +272,8 @@ class PowerTile extends Tile {
     OpenEdges = [Directions.Up, Directions.Right, Directions.Down, Directions.Left];
 
     clickTrigger() {
-        this.gameState.boardPowered = true;
-        this.power();
+        this.gameState.boardPowered = !this.gameState.boardPowered;
+        this.power(Directions.Up);
     }
 
     getStringRepresentation() {
@@ -310,6 +312,8 @@ class GameState {
         this.sizeX = sizeX;
         this.sizeY = sizeY;
     }
+
+    powerDown()
 }
 
 export class GameLogic {
