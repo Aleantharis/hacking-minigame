@@ -1,4 +1,4 @@
-import { Constants as CONST} from "./const.js";
+import { Constants as CONST } from "./const.js";
 import { Assets } from "./const.js";
 import { GameLogic } from "./gameLogic.js";
 
@@ -24,11 +24,11 @@ var logic;
 
 var boardSizeIdx = 0;
 const boardSizes = [
-	{ string: "4x4", X: 4, Y:4},
-	{ string: "8x4", X: 8, Y:4},
-	{ string: "8x8", X: 8, Y:8},
-	{ string: "12x8", X: 12, Y:8},
-	{ string: "12x12", X: 12, Y:12}
+	{ X: 4, Y: 4 },
+	{ X: 8, Y: 4 },
+	{ X: 8, Y: 8 },
+	{ X: 12, Y: 8 },
+	{ X: 12, Y: 12 }
 ];
 
 resizeCanvas();
@@ -97,7 +97,7 @@ function pointerDownHandler(event) {
 function pointerUpHandler(event) {
 	if (event.pointerType === "touch") {
 		var index = touchPoints.indexOf(event.pointerId);
-		
+
 		// handle touch up
 	}
 	else {
@@ -141,7 +141,7 @@ function draw() {
 		for (let j = 0; j < boardSizes[boardSizeIdx].Y; j++) {
 			var rgbVal;
 
-			if(j % 2 === 0) {
+			if (j % 2 === 0) {
 				rgbVal = (255 / boardSizes[boardSizeIdx].X) * i;
 			}
 			else {
@@ -150,7 +150,7 @@ function draw() {
 
 			ctx.fillStyle = `rgb(${rgbVal}, ${rgbVal}, ${rgbVal})`
 
-			ctx.fillRect(i * tileSize, j* tileSize, tileSize, tileSize);
+			ctx.fillRect(i * tileSize, j * tileSize, tileSize, tileSize);
 		}
 	}
 	ctx.restore();
@@ -205,7 +205,7 @@ function stopGame() {
 	// canvas.classList.remove("noCrsr");
 
 	// clear out touchpoints 
-	if(touchPoints.length > 0) {
+	if (touchPoints.length > 0) {
 		touchPoints = [];
 	}
 }
@@ -216,7 +216,7 @@ function boardSizeInputChangeHandler(event) {
 }
 
 function renderBoardSizeLabel() {
-	var out = "Size: " + boardSizes[boardSizeIdx];
+	var out = `Size: ${boardSizes[boardSizeIdx].X}x${boardSizes[boardSizeIdx].Y}`;
 	document.getElementById("lblSize").innerHTML = out;
 }
 
@@ -234,14 +234,14 @@ function startGame() {
 	document.getElementById("fMenu").onsubmit = stopGameHandler;
 	// canvas.classList.add("noCrsr");
 
-	logic = new GameLogic(0, boardSizes[boardSizeIdx].X, boardSizes[boardSizeIdx].Y, function(success) { alert(success ? "yay" : "meh"); });
+	logic = new GameLogic(0, boardSizes[boardSizeIdx].X, boardSizes[boardSizeIdx].Y, function (success) { alert(success ? "yay" : "meh"); });
 
 	boardScaleY = boardSizes[boardSizeIdx].Y / boardSizes[boardSizeIdx].X;
 
 	// force resize to recalc tilesize
 	resizeCanvas();
 
-	if(DEBUG) {
+	if (DEBUG) {
 		console.table(logic.circuitBoard);
 	}
 }
