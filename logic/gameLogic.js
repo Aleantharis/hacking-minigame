@@ -365,7 +365,7 @@ export class GameLogic {
             do {
                 trapX = Math.floor(Math.random() * sizeX);
                 trapY = Math.floor(Math.random() * sizeY);
-            } while (this.circuitBoard[trapX][trapY] === undefined);
+            } while (this.circuitBoard[trapX][trapY] !== undefined);
 
             this.circuitBoard[trapX][trapY] = new TrapTile(trapX, trapY, this.gameState);
             trapTiles++;
