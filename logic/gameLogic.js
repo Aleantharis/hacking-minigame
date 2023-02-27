@@ -64,6 +64,11 @@ class Directions {
         return [Directions.Up, Directions.Right, Directions.Down, Directions.Left].filter(n => !input.includes(n));
     }
 
+    static getRandomMissingDirection(input) {
+        var x = this.getMissingDirections(input);
+        return x[Math.floor(Math.random() * x.length)];
+    }
+
     static getByIndex(index) {
         switch (index) {
             case 0:
@@ -329,11 +334,7 @@ export class GameLogic {
                     // Add random amount of open edges to tile
                     var edgeAmnt = Math.floor(Math.random() * 3) + 2;
                     for (let k = 0; k < edgeAmnt; k++) {
-                        var dir;
-                        do {
-                            dir = Directions.random();
-                        } while (temp.OpenEdges.indexOf(dir) === -1);
-                        temp.OpenEdges.push(dir);
+                        temp.OpenEdges.push(Directions.getRandomMissingDirection(temp.OpenEdges));
                     }
 
                     this.circuitBoard[i][j] = temp;
