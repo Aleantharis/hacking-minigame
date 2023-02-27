@@ -371,6 +371,8 @@ export class GameLogic {
             trapTiles++;
         }
 
+        var maxFixedTiles = sizeX * sizeY * GameLogic.difficultyValues[difficulty].fixedTilePercentage;
+
         // Init Rest of tiles
         for (let i = 0; i < sizeX; i++) {
             for (let j = 0; j < sizeY; j++) {
@@ -378,7 +380,7 @@ export class GameLogic {
                     var temp;
 
                     // generate fixed tile if rng allows for it
-                    if (Math.random() <= GameLogic.difficultyValues[difficulty].fixedTilePercentage) {
+                    if (maxFixedTiles-- > 0 && Math.random() <= GameLogic.difficultyValues[difficulty].fixedTilePercentage) {
                         temp = new Tile(i, j, this.gameState);
                     }
                     else {
@@ -386,8 +388,10 @@ export class GameLogic {
                     }
 
                     // Add random amount of open edges to tile
-                    // TODO: bias the randomness - 1/6 2/6 3/6 - maybe factor in difficulty
-                    var edgeAmnt = Math.floor(Math.random() * 3) + 2;
+                    // bias the randomness - 1/6 2/6 3/6 - maybe factor in difficulty
+                    var ran = Math.floor(Math.random() * 6);
+                    // i am too stupid to create a mathematical formula for this
+                    var edgeAmnt = (ran < 3 ? 0 : ran < 5 ? 1 : 2) + 2;
                     for (let k = 0; k < edgeAmnt; k++) {
                         temp.OpenEdges.push(Directions.getRandomMissingDirection(temp.OpenEdges));
                     }
