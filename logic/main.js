@@ -134,8 +134,12 @@ function pointerUpHandler(event) {
 			}
 			return;
 		case "Success":
+			drawDialog = !drawDialog;
+			drawSuccess();
+			return;
 		case "Failure":
 			drawDialog = !drawDialog;
+			drawFailure();
 			return;
 		case "Intro":
 		case "Loading":
