@@ -154,7 +154,7 @@ function draw() {
 			ctx.fillStyle = logic.circuitBoard[i][j].printColor ?? `rgb(${255 - rgbVal}, ${255 - rgbVal}, ${255 - rgbVal})`;
 			ctx.font = Math.floor(tileSize * 0.9) + "px Segoe UI";
 			ctx.textBaseline = "top";
-			ctx.fillText(logic.circuitBoard[i][j].getStringRepresentation(), (i + 0.1) * tileSize, (j + 0.1) * tileSize, tileSize * 0.9);
+			ctx.fillText(logic.circuitBoard[i][j].getStringRepresentation(), (i + 0.05) * tileSize, (j + 0.05) * tileSize, tileSize * 0.9);
 		}
 	}
 	ctx.restore();
