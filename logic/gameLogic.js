@@ -312,8 +312,6 @@ class GameState {
         this.sizeX = sizeX;
         this.sizeY = sizeY;
     }
-
-    powerDown()
 }
 
 export class GameLogic {
