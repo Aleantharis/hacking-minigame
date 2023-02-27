@@ -1,5 +1,6 @@
 import { Constants as CONST} from "./const.js";
 import { Assets } from "./const.js";
+import { GameLogic } from "./gameLogic.js";
 
 const assetsLoaded = () => { document.getElementById("btnStart").disabled = false; alert("test"); };
 const assets = new Assets({
@@ -15,6 +16,8 @@ var gameLoop;
 var difficulty = 0;
 var lives = 1;
 var canvasMinSize = 0;
+
+var logic;
 
 resizeCanvas();
 // Attempt at auto-resize
@@ -194,6 +197,8 @@ function startGame() {
 	document.getElementById("btnStart").value = "Stop";
 	document.getElementById("fMenu").onsubmit = stopGameHandler;
 	canvas.classList.add("noCrsr");
+
+	logic = new GameLogic(0, 8, 4, function(success) { alert(success ? "yay" : "meh"); });
 }
 
 document.onpointermove = handleMouseMove;
