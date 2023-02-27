@@ -2,7 +2,7 @@ import { Constants as CONST } from "./const.js";
 import { Assets } from "./const.js";
 import { GameLogic } from "./gameLogic.js";
 
-const assetsLoaded = () => { document.getElementById("btnStart").disabled = false; alert("test"); };
+const assetsLoaded = () => { document.getElementById("btnStart").disabled = false; console.log("assets loaded"); };
 const assets = new Assets({
 	test: "img/test.jpg"
 }, assetsLoaded);
@@ -47,6 +47,8 @@ function resizeCanvas() {
 
 	tileSize = Math.min(canvas.width / boardSizes[boardSizeIdx].X, Math.min(canvas.height, canvas.width * boardScaleY) / boardSizes[boardSizeIdx].Y) * BOARDSCALE;
 	ctx.translate((canvas.width - (tileSize * boardSizes[boardSizeIdx].X)) / 2, (canvas.height - (tileSize * boardSizes[boardSizeIdx].Y)) / 2);
+
+	// todo: draw-idle for gameover state
 }
 window.addEventListener("resize", resizeCanvas);
 window.addEventListener("orientationchange", resizeCanvas);
@@ -103,6 +105,8 @@ function pointerUpHandler(event) {
 	else {
 		// handle mouse up
 	}
+
+	console.log(getMousePos(event));
 }
 canvas.addEventListener("pointerdown", pointerDownHandler, false);
 canvas.addEventListener("pointerup", pointerUpHandler, false);
