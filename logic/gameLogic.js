@@ -372,6 +372,8 @@ export class GameLogic {
             var trapX = -1;
             var trapY = -1;
 
+            // TODO: prevent traps from spawning next to power node & next to 4-direction blocks
+
             do {
                 trapX = Math.floor(Math.random() * sizeX);
                 trapY = Math.floor(Math.random() * sizeY);

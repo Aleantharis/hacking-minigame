@@ -2,11 +2,11 @@ import { Constants as CONST } from "./const.js";
 import { Assets } from "./const.js";
 import { GameLogic } from "./gameLogic.js";
 
-const assetsLoaded = () => { 
-	document.getElementById("btnStart").disabled = false; 
-	console.log("assets loaded"); 
+const assetsLoaded = () => {
+	document.getElementById("btnStart").disabled = false;
+	console.log("assets loaded");
 	gameState = "Intro";
-	
+
 	// trigger resize to trigger redraw for intro
 	resizeCanvas();
 };
@@ -29,6 +29,7 @@ var tileSize;
 
 // "Loading", "Intro", "Running", "Success", "Failure"
 var gameState = "Loading";
+var drawDialog = true;
 
 var mouseX = 0;
 var mouseY = 0;
@@ -62,16 +63,16 @@ function resizeCanvas() {
 	ctx.translate((canvas.width - (tileSize * boardSizes[boardSizeIdx].X)) / 2, (canvas.height - (tileSize * boardSizes[boardSizeIdx].Y)) / 2);
 
 
-	switch(gameState) {
-		case "Intro": 
+	switch (gameState) {
+		case "Intro":
 			drawIntro();
-		break;
+			break;
 		case "Success":
 			drawSuccess();
-		break;
+			break;
 		case "Failure":
 			drawFailure();
-		break;
+			break;
 	}
 }
 window.addEventListener("resize", resizeCanvas);
@@ -123,25 +124,33 @@ function pointerDownHandler(event) {
 
 function pointerUpHandler(event) {
 	// Prevent interaction if gameloop is not running
-	if(!gameLoop || !logic) {
-		return;
+	switch (gameState) {
+		case "Running":
+			var relX = Math.floor(mouseX / tileSize);
+			var relY = Math.floor(mouseY / tileSize);
+
+			if (relX >= 0 && relX < boardSizes[boardSizeIdx].X && relY >= 0 && relY < boardSizes[boardSizeIdx].Y) {
+				logic.boardInteraction(relX, relY);
+			}
+			return;
+		case "Success":
+		case "Failure":
+			drawDialog = !drawDialog;
+			return;
+		case "Intro":
+		case "Loading":
+		default:
+			return;
 	}
 
-	if (event.pointerType === "touch") {
-		var index = touchPoints.indexOf(event.pointerId);
+	// if (event.pointerType === "touch") {
+	// 	var index = touchPoints.indexOf(event.pointerId);
 
-		// handle touch up
-	}
-	else {
-		// handle mouse up
-	}
-
-	var relX = Math.floor(mouseX / tileSize);
-	var relY = Math.floor(mouseY / tileSize);
-	
-	if (relX >= 0 && relX < boardSizes[boardSizeIdx].X && relY >= 0 && relY < boardSizes[boardSizeIdx].Y) {
-		logic.boardInteraction(relX, relY);
-	}
+	// 	// handle touch up
+	// }
+	// else {
+	// 	// handle mouse up
+	// }
 }
 canvas.addEventListener("pointerdown", pointerDownHandler, false);
 canvas.addEventListener("pointerup", pointerUpHandler, false);
@@ -164,17 +173,54 @@ function drawDebug() {
 
 function drawSuccess() {
 	draw();
-
 	drawTransparentOverlay();
 	// TODO: draw success window
+
+	ctx.save();
+	ctx.setTransform(1, 0, 0, 1, 0, 0);
+	ctx.translate(canvas.width - (canvasMinSize * BOARDSCALE), canvas.height - (canvasMinSize * BOARDSCALE));
+	ctx.fillStyle = "rgba(0, 0, 0, 0.4)";
+	ctx.fillRect(0, 0, canvasMinSize * BOARDSCALE, canvasMinSize * BOARDSCALE);
+
+	ctx.font = Math.floor(canvas.canvasMinSize * BOARDSCALE * 0.5) + "px Segoe UI";
+	ctx.fillStyle = "darkgreen";
+	ctx.textBaseline = "top";
+	ctx.fillText("HACK SUCCESSFUL", 0, 0, canvasMinSize * BOARDSCALE);
+
+	ctx.font = Math.floor(canvas.canvasMinSize * BOARDSCALE * 0.25) + "px Segoe UI";
+	ctx.textBaseline = "bottom";
+	ctx.fillText("(Click to hide overlay)", 0, canvasMinSize * BOARDSCALE, canvasMinSize * BOARDSCALE);
+	ctx.restore();
+
+	// HACK SUCCESSFUL
+	// (click here to hide overlay)
 }
 
 function drawFailure() {
 	draw();
-
 	drawTransparentOverlay();
 
 	// TODO: draw failure window
+
+	// HACK FAILED
+	// You triggered a trap
+	// (click here to hide overlay)
+
+	ctx.save();
+	ctx.setTransform(1, 0, 0, 1, 0, 0);
+	ctx.translate(canvas.width - (canvasMinSize * BOARDSCALE), canvas.height - (canvasMinSize * BOARDSCALE));
+	ctx.fillStyle = "rgba(0, 0, 0, 0.4)";
+	ctx.fillRect(0, 0, canvasMinSize * BOARDSCALE, canvasMinSize * BOARDSCALE);
+
+	ctx.font = Math.floor(canvas.canvasMinSize * BOARDSCALE * 0.5) + "px Segoe UI";
+	ctx.fillStyle = "darkred";
+	ctx.textBaseline = "top";
+	ctx.fillText("TRAP TRIGGERED - HACK FAILED", 0, 0, canvasMinSize * BOARDSCALE);
+	
+	ctx.font = Math.floor(canvas.canvasMinSize * BOARDSCALE * 0.25) + "px Segoe UI";
+	ctx.textBaseline = "bottom";
+	ctx.fillText("(Click to hide overlay)", 0, canvasMinSize * BOARDSCALE, canvasMinSize * BOARDSCALE);
+	ctx.restore();
 }
 
 function drawIntro() {
@@ -277,14 +323,17 @@ function startGameHandler(event) {
 }
 
 function stopGame(win) {
-	if(gameState !== "Intro")  {
+	if (gameState !== "Intro") {
 		gameState = win ? "Success" : "Failure";
 	}
+
+	drawDialog = true;
 
 	clearInterval(gameLoop);
 	document.getElementById("sDiff").disabled = false;
 	document.getElementById("inSize").disabled = false;
 	document.getElementById("btnStart").value = "Start";
+	document.getElementById("cbDebug").disabled = true;
 	document.getElementById("fMenu").onsubmit = startGameHandler;
 	// canvas.classList.remove("noCrsr");
 
@@ -319,6 +368,7 @@ function startGame() {
 	document.getElementById("inSize").disabled = true;
 	renderBoardSizeLabel();
 	document.getElementById("btnStart").value = "Stop";
+	document.getElementById("cbDebug").disabled = false;
 	document.getElementById("fMenu").onsubmit = stopGameHandler;
 	// canvas.classList.add("noCrsr");
 
