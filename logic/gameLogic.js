@@ -173,11 +173,11 @@ class Tile {
                 }
                 else if (this.OpenEdges.indexOf(Directions.Right) >= 0) {
                     if (this.OpenEdges.indexOf(Directions.Left) >= 0) {
-                        return "┏";
+                        return "━";
                     }
 
                     if (this.OpenEdges.indexOf(Directions.Down) >= 0) {
-                        return "━";
+                        return "┏";
                     }
                 }
                 else {
