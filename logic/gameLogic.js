@@ -84,7 +84,7 @@ class Directions {
         }
     }
 
-    static random() {
+    static getRandom() {
         return Directions.getByIndex(Math.floor(Math.random() * 4));
     }
 }
