@@ -215,7 +215,7 @@ class RotatingTile extends Tile {
         // Only allow rotation when board is not powered
         if (!this.gameState.boardPowered) {
             var temp = [];
-            this.OpenEdges.forEach(element => temp += Directions.rotate(element, true));
+            this.OpenEdges.forEach(element => temp.push(Directions.rotate(element, true)));
             this.OpenEdges = temp;
         }
     }
