@@ -301,7 +301,7 @@ export class GameLogic {
 
         // Init trap tiles
         var trapTiles = 0;
-        while (trapTiles < difficultyValues[difficulty].trapTileAmount) {
+        while (trapTiles < GameLogic.difficultyValues[difficulty].trapTileAmount) {
             var trapX = -1;
             var trapY = -1;
 
@@ -319,7 +319,7 @@ export class GameLogic {
                 if (this.circuitBoard[i][j] === undefined) {
                     var temp;
                     // generate fixed tile if rng allows for it
-                    if (Math.random <= difficultyValues[difficulty].fixedTilePercentage) {
+                    if (Math.random <= GameLogic.difficultyValues[difficulty].fixedTilePercentage) {
                         temp = new Tile(i, j, this.gameState);
                     }
                     else {
