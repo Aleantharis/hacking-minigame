@@ -151,7 +151,7 @@ function draw() {
 			ctx.fillStyle = `rgb(${rgbVal}, ${rgbVal}, ${rgbVal})`;
 			ctx.fillRect(i * tileSize, j * tileSize, tileSize, tileSize);
 
-			ctx.fillStyle = logic.circuitBoard[i][j].printColor ?? `rgb(${255 - rgbVal}, ${255 - rgbVal}, ${255 - rgbVal})`;
+			ctx.fillStyle = logic.circuitBoard[i][j].getPrintColor() ?? `rgb(${255 - rgbVal}, ${255 - rgbVal}, ${255 - rgbVal})`;
 			ctx.font = Math.floor(tileSize * 0.9) + "px Segoe UI";
 			ctx.textBaseline = "top";
 			ctx.fillText(logic.circuitBoard[i][j].getStringRepresentation(), (i + 0.05) * tileSize, (j + 0.05) * tileSize, tileSize * 0.9);

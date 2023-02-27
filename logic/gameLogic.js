@@ -97,7 +97,6 @@ class Tile {
     OpenEdges = [];
     IsPowered = false;
     gameState;
-    printColor;
 
     constructor(X, Y, gameState) {
         this.X = X;
@@ -202,6 +201,13 @@ class Tile {
                 throw new Error("Invalid Amount of Open Edges");
         }
     }
+
+    getPrintColor() {
+        if(this.IsPowered) {
+            return "cyan";
+        }
+        return undefined;
+    }
 }
 
 class RotatingTile extends Tile {
@@ -210,50 +216,70 @@ class RotatingTile extends Tile {
         this.OpenEdges.forEach(element => temp += Direction.rotate(element, true));
         this.OpenEdges = temp;
     }
+
+    getPrintColor() {
+        if(this.IsPowered) {
+            return "cyan";
+        }
+        return "powderblue";
+    }
 }
 
 class GoalTile extends Tile {
-    printColor = "goldenrod";
-
     OpenEdges = [Directions.Up, Directions.Right, Directions.Down, Directions.Left];
 
     power(incomingFrom) {
         this.gameState.goalPowered = true;
-        this.printColor = "gold";
     }
 
     getStringRepresentation() {
-        return "G";
+        return "◎";
+    }
+
+    getPrintColor() {
+        if(this.IsPowered) {
+            return "gold";
+        }
+        return "goldenrod";
     }
 }
 
 class TrapTile extends Tile {
-    printColor = "darkred";
-
     OpenEdges = [Directions.Up, Directions.Right, Directions.Down, Directions.Left];
 
     power(incomingFrom) {
         this.gameState.trapPowered = true;
-        this.printColor = "red";
     }
 
     getStringRepresentation() {
-        return "X";
+        return "◍";
+    }
+
+    getPrintColor() {
+        if(this.IsPowered) {
+            return "red";
+        }
+        return "darkred";
     }
 }
 
 class PowerTile extends Tile {
-    printColor = "darkgreen";
     OpenEdges = [Directions.Up, Directions.Right, Directions.Down, Directions.Left];
 
     clickTrigger() {
         this.gameState.boardPowered = true;
-        this.printColor = "green";
         this.power();
     }
 
     getStringRepresentation() {
-        return "P";
+        return "◉";
+    }
+
+    getPrintColor() {
+        if(this.IsPowered) {
+            return "green";
+        }
+        return "darkgreen";
     }
 }
 
