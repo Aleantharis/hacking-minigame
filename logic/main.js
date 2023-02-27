@@ -215,18 +215,18 @@ function drawIntro() {
 function drawDialog(firstLine, secondLine, fillStyle) {
 	ctx.save();
 	ctx.setTransform(1, 0, 0, 1, 0, 0);
-	ctx.translate((canvas.width - (canvasMinSize * BOARDSCALE)) / 2, (canvas.height - (canvasMinSize * BOARDSCALE) / 2));
+	ctx.translate((canvas.width * ((1 - BOARDSCALE) / 2), (canvas.height * ((1 - BOARDSCALE) / 2))));
 	ctx.fillStyle = "rgba(0, 0, 0, 0.4)";
-	ctx.fillRect(0, 0, canvasMinSize * BOARDSCALE, canvasMinSize * BOARDSCALE);
+	ctx.fillRect(0, 0, canvas.width * BOARDSCALE, canvas.height * BOARDSCALE);
 
-	ctx.font = Math.floor(canvas.canvasMinSize * BOARDSCALE * 0.5) + "px Segoe UI";
+	ctx.font = Math.floor(canvas.width * BOARDSCALE * 0.5) + "px Segoe UI";
 	ctx.fillStyle = fillStyle;
 	ctx.textBaseline = "top";
-	ctx.fillText(firstLine, 0, 0, canvasMinSize * BOARDSCALE);
+	ctx.fillText(firstLine, 0, 0, canvas.width * BOARDSCALE);
 
-	ctx.font = Math.floor(canvas.canvasMinSize * BOARDSCALE * 0.25) + "px Segoe UI";
+	ctx.font = Math.floor(canvas.width * BOARDSCALE * 0.25) + "px Segoe UI";
 	ctx.textBaseline = "bottom";
-	ctx.fillText(secondLine, 0, canvasMinSize * BOARDSCALE, canvasMinSize * BOARDSCALE);
+	ctx.fillText(secondLine, 0, canvas.height * BOARDSCALE, canvas.width * BOARDSCALE);
 	ctx.restore();
 }
 
