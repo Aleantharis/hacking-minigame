@@ -109,7 +109,12 @@ function pointerUpHandler(event) {
 		// handle mouse up
 	}
 
-	console.log(getMousePos(event));
+	var relX = Math.floor(mouseX / tileSize);
+	var relY = Math.floor(mouseY / tileSize);
+	
+	if (relX > 0 && relX < boardSizes[boardSizeIdx].X && relY > 0 && relY < boardSizes[boardSizeIdx].Y) {
+		logic.boardInteraction(relX, relY);
+	}
 }
 canvas.addEventListener("pointerdown", pointerDownHandler, false);
 canvas.addEventListener("pointerup", pointerUpHandler, false);
@@ -169,15 +174,6 @@ function draw() {
 
 	if (DEBUG) {
 		drawDebug();
-	}
-}
-
-function getConvertedMouseCoords() {
-	var relX = Math.floor(mouseX / tileSize);
-	var relY = Math.floor(mouseY / tileSize);
-
-	if (relX > 0 && relX < boardSizes[boardSizeIdx].X && relY > 0 && relY < boardSizes[boardSizeIdx].Y) {
-		logic.boardInteraction(relX, relY);
 	}
 }
 
