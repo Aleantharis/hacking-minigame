@@ -238,7 +238,7 @@ function startGame() {
 	document.getElementById("fMenu").onsubmit = stopGameHandler;
 	// canvas.classList.add("noCrsr");
 
-	logic = new GameLogic(0, boardSizes[boardSizeIdx].X, boardSizes[boardSizeIdx].Y, function (success) { alert(success ? "yay" : "meh"); });
+	logic = new GameLogic(difficulty, boardSizes[boardSizeIdx].X, boardSizes[boardSizeIdx].Y, function (success) { alert(success ? "yay" : "meh"); });
 
 	boardScaleY = boardSizes[boardSizeIdx].Y / boardSizes[boardSizeIdx].X;
 

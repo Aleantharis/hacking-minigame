@@ -311,9 +311,9 @@ class GameState {
 
 export class GameLogic {
     static difficultyValues = {
-        0: new DifficultySettings(0.1, 0),
-        1: new DifficultySettings(0.2, 1),
-        2: new DifficultySettings(0.4, 2)
+        0: new DifficultySettings(0.2, 0),
+        1: new DifficultySettings(0.35, 1),
+        2: new DifficultySettings(0.45, 2)
     }
 
     circuitBoard;
