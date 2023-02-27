@@ -113,13 +113,13 @@ class Tile {
     getNeighborCoordinates(direction) {
         switch (direction.name) {
             case "up":
-                return { X: (this.X - 1), Y: (this.Y) };
-            case "right":
-                return { X: (this.X), Y: (this.Y + 1) };
-            case "down":
-                return { X: (this.X + 1), Y: (this.Y) };
-            case "left":
                 return { X: (this.X), Y: (this.Y - 1) };
+            case "right":
+                return { X: (this.X + 1), Y: (this.Y) };
+            case "down":
+                return { X: (this.X), Y: (this.Y + 1) };
+            case "left":
+                return { X: (this.X - 1), Y: (this.Y) };
             default:
                 throw new Error("Invalid Direction");
         }
@@ -130,8 +130,8 @@ class Tile {
         if (this.OpenEdges.indexOf(incomingFrom) > -1) {
             this.IsPowered = this.gameState.boardPowered;
             this.OpenEdges.forEach(edge => {
-                if(this.Neighbors.get(edge) !== null && this.Neighbors.get(edge).IsPowered !== this.gameState.boardPowered) {
-                    this.Neighbors[edge].power(Directions.inverse(edge));
+                if (this.Neighbors.get(edge) !== null && this.Neighbors.get(edge).IsPowered !== this.gameState.boardPowered) {
+                    this.Neighbors.get(edge).power(Directions.inverse(edge));
                 }
             });
             //this.OpenEdges.forEach(direction => this.Neighbors[direction] !== null && this.Neighbors[direction].IsPowered !== this.gameState.boardPowered && this.Neighbors[direction].power(Directions.inverse(direction)));
