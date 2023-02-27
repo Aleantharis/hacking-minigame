@@ -142,15 +142,17 @@ function draw() {
 			var rgbVal;
 
 			if (j % 2 === 0) {
-				rgbVal = (255 / boardSizes[boardSizeIdx].X) * i;
+				rgbVal = (255 / (boardSizes[boardSizeIdx].X - 1)) * i;
 			}
 			else {
-				rgbVal = 255 - (255 / boardSizes[boardSizeIdx].X) * i;
+				rgbVal = 255 - (255 / (boardSizes[boardSizeIdx].X - 1)) * i;
 			}
 
-			ctx.fillStyle = `rgb(${rgbVal}, ${rgbVal}, ${rgbVal})`
-
+			ctx.fillStyle = `rgb(${rgbVal}, ${rgbVal}, ${rgbVal})`;
 			ctx.fillRect(i * tileSize, j * tileSize, tileSize, tileSize);
+
+			ctx.fillStyle = "Red";
+			ctx.fillText(logic.circuitBoard[i][j].getStringRepresentation(), i * tileSize, j * tileSize, tileSize);
 		}
 	}
 	ctx.restore();
