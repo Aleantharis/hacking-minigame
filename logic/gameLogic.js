@@ -327,7 +327,7 @@ export class GameLogic {
                     }
 
                     // Add random amount of open edges to tile
-                    var edgeAmnt = math.floor(Math.random() * 3) + 2;
+                    var edgeAmnt = Math.floor(Math.random() * 3) + 2;
                     for (let k = 0; k < edgeAmnt; k++) {
                         var dir;
                         do {
