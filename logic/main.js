@@ -162,7 +162,7 @@ function drawSuccess() {
 	ctx.save();
 	ctx.setTransform(1, 0, 0, 1, 0, 0);
 	ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
-	ctx.fillRect(assets.getAsset("test"), 0, 0, canvas.width, canvas.height);
+	ctx.fillRect(0, 0, canvas.width, canvas.height);
 	ctx.restore();
 
 	// TODO: draw success window
@@ -175,7 +175,7 @@ function drawFailure() {
 	ctx.save();
 	ctx.setTransform(1, 0, 0, 1, 0, 0);
 	ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
-	ctx.fillRect(assets.getAsset("test"), 0, 0, canvas.width, canvas.height);
+	ctx.fillRect(0, 0, canvas.width, canvas.height);
 	ctx.restore();
 
 	// TODO: draw failure window
@@ -186,7 +186,7 @@ function drawIntro() {
 	ctx.save();
 	ctx.setTransform(1, 0, 0, 1, 0, 0);
 	ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
-	ctx.fillRect(assets.getAsset("test"), 0, 0, canvas.width, canvas.height);
+	ctx.fillRect(0, 0, canvas.width, canvas.height);
 	ctx.restore();
 
 	// TODO: draw intro window
