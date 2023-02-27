@@ -310,7 +310,7 @@ class GameState {
     boardPowered = false;
     goalPowered = false;
     trapPowered = false;
-    DEBUG = true;
+    DEBUG = false;
 
     constructor(difficulty, sizeX, sizeY) {
         this.difficulty = difficulty;

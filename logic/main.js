@@ -59,6 +59,7 @@ window.addEventListener("orientationchange", resizeCanvas);
 
 function debugToggle() {
 	DEBUG = document.getElementById("cbDebug").checked;
+	logic.gameState.DEBUG = DEBUG;
 
 	// if (DEBUG) {
 	// 	document.getElementById("testOut").classList.remove("hidden");
