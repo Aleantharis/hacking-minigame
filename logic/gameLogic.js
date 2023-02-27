@@ -14,10 +14,12 @@ class Directions {
     static Left;
 
     static {
+        Directions.#isInternalConstructing = true;
         Up = new Directions("up", 0);
         Right = new Directions("right", 1);
         Down = new Directions("down", 2);
         Left = new Directions("left", 3);
+        Directions.#isInternalConstructing = false;
     }
 
     constructor(name, idx) {
