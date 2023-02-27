@@ -286,10 +286,10 @@ export class GameLogic {
                 break;
             case 1: // Right Edge
                 tempX = Math.floor(Math.random() * sizeX);
-                tempY = sizeY;
+                tempY = sizeY - 1;
                 break;
             case 2: // Bottom Edge
-                tempX = sizeX;
+                tempX = sizeX - 1;
                 tempY = Math.floor(Math.random() * sizeY);
                 break;
             case 3: // Left Edge
