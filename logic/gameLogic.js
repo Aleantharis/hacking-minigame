@@ -8,10 +8,17 @@
 class Directions {
     static #isInternalConstructing = false;
 
-    static Up = new Directions("up", 0);
-    static Right = new Directions("right", 1);
-    static Down = new Directions("down", 2);
-    static Left = new Directions("left", 3);
+    static Up;
+    static Right;
+    static Down;
+    static Left;
+
+    static {
+        Up = new Directions("up", 0);
+        Right = new Directions("right", 1);
+        Down = new Directions("down", 2);
+        Left = new Directions("left", 3);
+    }
 
     constructor(name, idx) {
         if (!Directions.#isInternalConstructing) {
@@ -121,7 +128,7 @@ class Tile {
 
     clickTrigger() {
         // Do nothing
-        if(this.gameState.DEBUG) {
+        if (this.gameState.DEBUG) {
             console.table(this);
         }
     }
@@ -144,33 +151,33 @@ class Tile {
                         throw new Error("Invalid Direction");
                 }
             case 2:
-                if(this.OpenEdges.indexOf(Directions.Up) >= 0){
-                    if(this.OpenEdges.indexOf(Directions.Left) >= 0) {
+                if (this.OpenEdges.indexOf(Directions.Up) >= 0) {
+                    if (this.OpenEdges.indexOf(Directions.Left) >= 0) {
                         return "┛";
                     }
 
-                    if(this.OpenEdges.indexOf(Directions.Down) >= 0) {
+                    if (this.OpenEdges.indexOf(Directions.Down) >= 0) {
                         return "┃";
                     }
 
-                    if(this.OpenEdges.indexOf(Directions.Right) >= 0) {
+                    if (this.OpenEdges.indexOf(Directions.Right) >= 0) {
                         return "┗";
                     }
                 }
-                else if(this.OpenEdges.indexOf(Directions.Right) >= 0) {
-                    if(this.OpenEdges.indexOf(Directions.Left) >= 0) {
+                else if (this.OpenEdges.indexOf(Directions.Right) >= 0) {
+                    if (this.OpenEdges.indexOf(Directions.Left) >= 0) {
                         return "┏";
                     }
 
-                    if(this.OpenEdges.indexOf(Directions.Down) >= 0) {
+                    if (this.OpenEdges.indexOf(Directions.Down) >= 0) {
                         return "━";
                     }
                 }
                 else {
                     return "┓";
                 }
-            case 3: 
-                switch(Directions.getMissingDirections(this.OpenEdges)[0].name) {
+            case 3:
+                switch (Directions.getMissingDirections(this.OpenEdges)[0].name) {
                     case "up":
                         return "┳";
                     case "right":
