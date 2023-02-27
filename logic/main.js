@@ -124,7 +124,7 @@ function drawDebug() {
 	ctx.font = Math.floor(canvasMinSize * 0.05) + "px Segoe UI";
 	ctx.fillStyle = "White"
 	ctx.textBaseline = "bottom";
-	ctx.fillText(debugOutput, -canvas.width / 2 * 0.98, canvas.height / 2 * 0.98, canvas.width * 0.8);
+	ctx.fillText(debugOutput, 0, canvas.height * 0.98, canvas.width * 0.8);
 }
 
 function draw() {
