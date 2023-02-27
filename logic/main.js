@@ -17,6 +17,8 @@ var difficulty = 0;
 var lives = 1;
 var canvasMinSize = 0;
 const BOARDSCALE = 0.8;
+var boardScaleX = 1;
+var boardScaleY = 1;
 
 var logic;
 
@@ -35,7 +37,7 @@ function resizeCanvas() {
 	}
 
 	// Move coordinate origin to center of canvas
-	ctx.translate((canvas.width - (canvasMinSize * BOARDSCALE)) / 2, (canvas.height - (canvasMinSize * BOARDSCALE)) / 2);
+	ctx.translate((canvas.width - (canvas.width * boardScaleX * BOARDSCALE)) / 2, (canvas.height - (canvas.height * boardScaleY * BOARDSCALE)) / 2);
 }
 window.addEventListener("resize", resizeCanvas);
 window.addEventListener("orientationchange", resizeCanvas);
@@ -115,7 +117,7 @@ function drawDebug() {
 function draw() {
 	clearCanvas();
 
-	var tileSize = (canvasMinSize * BOARDSCALE) / Math.min(logic.gameState.sizeX, logic.gameState.sizeY);
+	var tileSize = (canvasMinSize * BOARDSCALE) / Math.max(logic.gameState.sizeX, logic.gameState.sizeY);
 
 	// draw test image
 	ctx.save();
@@ -126,7 +128,7 @@ function draw() {
 	ctx.beginPath();
 	ctx.save();
 	ctx.fillStyle = "Black";
-	ctx.fillRect(0, 0, canvasMinSize * BOARDSCALE, canvasMinSize * BOARDSCALE);
+	ctx.fillRect(0, 0, canvas.width * boardScaleX * BOARDSCALE, canvas.height * boardScaleY * BOARDSCALE);
 	ctx.fillStyle = "Gray";
 	ctx.fillRect(0,0, tileSize, tileSize);
 	ctx.restore();
@@ -211,6 +213,8 @@ function startGame() {
 	// canvas.classList.add("noCrsr");
 
 	logic = new GameLogic(0, 8, 4, function(success) { alert(success ? "yay" : "meh"); });
+
+	boardScaleY = logic.gameState.sizeY / logic.gameState.sizeX;
 
 	if(DEBUG) {
 		console.table(logic.circuitBoard);
