@@ -129,7 +129,12 @@ class Tile {
     power(incomingFrom) {
         if (this.OpenEdges.indexOf(incomingFrom) > -1) {
             this.IsPowered = this.gameState.boardPowered;
-            this.OpenEdges.forEach(direction => this.Neighbors[direction] !== null && this.Neighbors[direction].IsPowered !== this.gameState.boardPowered && this.Neighbors[direction].power(Directions.inverse(direction)));
+            this.OpenEdges.forEach(edge => {
+                if(this.Neighbors[edge] !== null && this.Neighbors[edge].IsPowered !== this.gameState.boardPowered) {
+                    this.Neighbors[edge].power(Directions.inverse(edge));
+                }
+            });
+            //this.OpenEdges.forEach(direction => this.Neighbors[direction] !== null && this.Neighbors[direction].IsPowered !== this.gameState.boardPowered && this.Neighbors[direction].power(Directions.inverse(direction)));
         }
     }
 
