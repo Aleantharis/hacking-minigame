@@ -301,8 +301,8 @@ export class GameLogic {
         var powerTile = new PowerTile(tempX, tempY);
         var goalTile = new GoalTile(sizeX - tempX, sizeY - tempY);
 
-        this.circuitBoard[tempX, tempY] = powerTile;
-        this.circuitBoard[goalTile.X, goalTile.X] = goalTile;
+        this.circuitBoard[tempX][tempY] = powerTile;
+        this.circuitBoard[goalTile.X][goalTile.X] = goalTile;
 
         // Init trap tiles
         var trapTiles = 0;
