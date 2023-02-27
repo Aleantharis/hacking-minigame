@@ -376,8 +376,9 @@ export class GameLogic {
             for (let j = 0; j < sizeY; j++) {
                 if (this.circuitBoard[i][j] === undefined) {
                     var temp;
+
                     // generate fixed tile if rng allows for it
-                    if (Math.random <= GameLogic.difficultyValues[difficulty].fixedTilePercentage) {
+                    if (Math.random() <= GameLogic.difficultyValues[difficulty].fixedTilePercentage) {
                         temp = new Tile(i, j, this.gameState);
                     }
                     else {
