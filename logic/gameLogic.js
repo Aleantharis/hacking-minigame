@@ -15,10 +15,10 @@ class Directions {
 
     static {
         Directions.#isInternalConstructing = true;
-        Up = new Directions("up", 0);
-        Right = new Directions("right", 1);
-        Down = new Directions("down", 2);
-        Left = new Directions("left", 3);
+        Directions.Up = new Directions("up", 0);
+        Directions.Right = new Directions("right", 1);
+        Directions.Down = new Directions("down", 2);
+        Directions.Left = new Directions("left", 3);
         Directions.#isInternalConstructing = false;
     }
 
