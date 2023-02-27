@@ -72,13 +72,13 @@ class Directions {
     static getByIndex(index) {
         switch (index) {
             case 0:
-                return Directions.Down;
-            case 1:
-                return Directions.Left;
-            case 2:
                 return Directions.Up;
-            case 3:
+            case 1:
                 return Directions.Right;
+            case 2:
+                return Directions.Down;
+            case 3:
+                return Directions.Left;
             default:
                 throw new Error("Invalid Index");
         }
