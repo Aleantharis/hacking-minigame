@@ -20,6 +20,9 @@ var boardScaleX = 1;
 var boardScaleY = 1;
 var tileSize;
 
+// "Intro", "Running", "Success", "Failure"
+var gameState = "Intro";
+
 var mouseX = 0;
 var mouseY = 0;
 
@@ -51,7 +54,18 @@ function resizeCanvas() {
 	tileSize = Math.min(canvas.width / boardSizes[boardSizeIdx].X, Math.min(canvas.height, canvas.width * boardScaleY) / boardSizes[boardSizeIdx].Y) * BOARDSCALE;
 	ctx.translate((canvas.width - (tileSize * boardSizes[boardSizeIdx].X)) / 2, (canvas.height - (tileSize * boardSizes[boardSizeIdx].Y)) / 2);
 
-	// todo: draw-idle for gameover state
+
+	switch(gameState) {
+		case "Intro": 
+			drawIntro();
+		break;
+		case "Success":
+			drawSuccess();
+		break;
+		case "Failure":
+			drawFailure();
+		break;
+	}
 }
 window.addEventListener("resize", resizeCanvas);
 window.addEventListener("orientationchange", resizeCanvas);
@@ -101,6 +115,11 @@ function pointerDownHandler(event) {
 }
 
 function pointerUpHandler(event) {
+	// Prevent interaction if gameloop is not running
+	if(!gameLoop || !logic) {
+		return;
+	}
+
 	if (event.pointerType === "touch") {
 		var index = touchPoints.indexOf(event.pointerId);
 
@@ -134,6 +153,43 @@ function drawDebug() {
 	ctx.fillStyle = "White"
 	ctx.textBaseline = "bottom";
 	ctx.fillText(debugOutput, 0, 0, canvas.width * 0.8);
+}
+
+function drawSuccess() {
+	draw();
+
+	// Draw gray overlay
+	ctx.save();
+	ctx.setTransform(1, 0, 0, 1, 0, 0);
+	ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
+	ctx.fillRect(assets.getAsset("test"), 0, 0, canvas.width, canvas.height);
+	ctx.restore();
+
+	// TODO: draw success window
+}
+
+function drawFailure() {
+	draw();
+
+	// Draw gray overlay
+	ctx.save();
+	ctx.setTransform(1, 0, 0, 1, 0, 0);
+	ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
+	ctx.fillRect(assets.getAsset("test"), 0, 0, canvas.width, canvas.height);
+	ctx.restore();
+
+	// TODO: draw failure window
+}
+
+function drawIntro() {
+	// Draw gray overlay
+	ctx.save();
+	ctx.setTransform(1, 0, 0, 1, 0, 0);
+	ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
+	ctx.fillRect(assets.getAsset("test"), 0, 0, canvas.width, canvas.height);
+	ctx.restore();
+
+	// TODO: draw intro window
 }
 
 function draw() {
@@ -205,7 +261,9 @@ function handleMouseMove(event) {
 
 function stopGameHandler(event) {
 	event.preventDefault();
-	stopGame();
+
+	gameState = "Intro";
+	stopGame(false);
 }
 
 function startGameHandler(event) {
@@ -213,7 +271,11 @@ function startGameHandler(event) {
 	startGame();
 }
 
-function stopGame() {
+function stopGame(win) {
+	if(gameState !== "Intro")  {
+		gameState = win ? "Success" : "Failure";
+	}
+
 	clearInterval(gameLoop);
 	document.getElementById("sDiff").disabled = false;
 	document.getElementById("inSize").disabled = false;
@@ -225,6 +287,9 @@ function stopGame() {
 	if (touchPoints.length > 0) {
 		touchPoints = [];
 	}
+
+	// Trigger resize to draw canvas
+	resizeCanvas();
 }
 
 function boardSizeInputChangeHandler(event) {
@@ -243,6 +308,7 @@ function startGame() {
 	boardSizeIdx = document.getElementById("inSize").value;
 
 	gameLoop = setInterval(draw, 10);
+	gameState = "Running";
 
 	document.getElementById("sDiff").disabled = true;
 	document.getElementById("inSize").disabled = true;
@@ -251,7 +317,7 @@ function startGame() {
 	document.getElementById("fMenu").onsubmit = stopGameHandler;
 	// canvas.classList.add("noCrsr");
 
-	logic = new GameLogic(difficulty, boardSizes[boardSizeIdx].X, boardSizes[boardSizeIdx].Y, function (success) { alert(success ? "yay" : "meh"); });
+	logic = new GameLogic(difficulty, boardSizes[boardSizeIdx].X, boardSizes[boardSizeIdx].Y, function (win) { stopGame(win); });
 
 	boardScaleY = boardSizes[boardSizeIdx].Y / boardSizes[boardSizeIdx].X;
 
