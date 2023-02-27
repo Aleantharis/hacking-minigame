@@ -368,6 +368,7 @@ export class GameLogic {
             } while (this.circuitBoard[trapX][trapY] === undefined);
 
             this.circuitBoard[trapX][trapY] = new TrapTile(trapX, trapY, this.gameState);
+            trapTiles++;
         }
 
         // Init Rest of tiles
@@ -384,6 +385,7 @@ export class GameLogic {
                     }
 
                     // Add random amount of open edges to tile
+                    // TODO: bias the randomness - 1/6 2/6 3/6 - maybe factor in difficulty
                     var edgeAmnt = Math.floor(Math.random() * 3) + 2;
                     for (let k = 0; k < edgeAmnt; k++) {
                         temp.OpenEdges.push(Directions.getRandomMissingDirection(temp.OpenEdges));
