@@ -352,9 +352,9 @@ export class GameLogic {
                 break;
         }
 
-        var powerTile = new PowerTile(tempX, tempY);
+        var powerTile = new PowerTile(tempX, tempY, this.gameState);
         ///TODO: Change How goal is spawned in relation to power - also maybe spawn more than one goal (adapt gamestate victory checks)
-        var goalTile = new GoalTile(sizeX - tempX - 1, sizeY - tempY - 1);
+        var goalTile = new GoalTile(sizeX - tempX - 1, sizeY - tempY - 1, this.gameState);
 
         this.circuitBoard[tempX][tempY] = powerTile;
         this.circuitBoard[goalTile.X][goalTile.Y] = goalTile;
