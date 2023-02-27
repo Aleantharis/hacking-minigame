@@ -20,6 +20,9 @@ var boardScaleX = 1;
 var boardScaleY = 1;
 var tileSize;
 
+var mouseX = 0;
+var mouseY = 0;
+
 var logic;
 
 var boardSizeIdx = 0;
@@ -124,7 +127,7 @@ function drawDebug() {
 	ctx.font = Math.floor(canvasMinSize * 0.05) + "px Segoe UI";
 	ctx.fillStyle = "White"
 	ctx.textBaseline = "bottom";
-	ctx.fillText(debugOutput, 0, canvas.height * 0.98, canvas.width * 0.8);
+	ctx.fillText(debugOutput, 0, 0, canvas.width * 0.8);
 }
 
 function draw() {
@@ -155,10 +158,10 @@ function draw() {
 			ctx.fillStyle = `rgb(${rgbVal}, ${rgbVal}, ${rgbVal})`;
 			ctx.fillRect(i * tileSize, j * tileSize, tileSize, tileSize);
 
-			ctx.fillStyle = logic.circuitBoard[i][j].getPrintColor() ?? `rgb(${255 - rgbVal}, ${255 - rgbVal}, ${255 - rgbVal})`;
+			ctx.fillStyle = logic.getTileAt(i, j).getPrintColor() ?? `rgb(${255 - rgbVal}, ${255 - rgbVal}, ${255 - rgbVal})`;
 			ctx.font = Math.floor(tileSize * 0.9) + "px Segoe UI";
 			ctx.textBaseline = "top";
-			ctx.fillText(logic.circuitBoard[i][j].getStringRepresentation(), (i + 0.05) * tileSize, (j + 0.05) * tileSize, tileSize * 0.9);
+			ctx.fillText(logic.getTileAt(i, j).getStringRepresentation(), (i + 0.05) * tileSize, (j + 0.05) * tileSize, tileSize * 0.9);
 		}
 	}
 	ctx.restore();
@@ -166,6 +169,15 @@ function draw() {
 
 	if (DEBUG) {
 		drawDebug();
+	}
+}
+
+function getConvertedMouseCoords() {
+	var relX = Math.floor(mouseX / tileSize);
+	var relY = Math.floor(mouseY / tileSize);
+
+	if (relX > 0 && relX < boardSizes[boardSizeIdx].X && relY > 0 && relY < boardSizes[boardSizeIdx].Y) {
+		logic.boardInteraction(relX, relY);
 	}
 }
 
@@ -186,11 +198,11 @@ function handleMouseMove(event) {
 	var matrix = ctx.getTransform();         // W3C (future)
 	var imatrix = matrix.invertSelf();
 
-	var transpX = pos.x * imatrix.a + pos.y * imatrix.c + imatrix.e;
-	var transpY = pos.x * imatrix.b + pos.y * imatrix.d + imatrix.f;
+	mouseX = pos.x * imatrix.a + pos.y * imatrix.c + imatrix.e;
+	mouseY = pos.x * imatrix.b + pos.y * imatrix.d + imatrix.f;
 
 	if (DEBUG) {
-		debugOutput = "X: " + Math.floor(transpX) + " | Y: " + Math.floor(transpY);
+		debugOutput = "X: " + Math.floor(mouseX) + " | Y: " + Math.floor(mouseY);
 	}
 }
 
