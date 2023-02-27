@@ -98,7 +98,7 @@ class Tile {
         this.Y = Y;
         this.gameState = gameState;
 
-        this.Neighbors = new HashTable();
+        this.Neighbors = new Map();
         this.Neighbors.set(Directions.Up, null);
         this.Neighbors.set(Directions.Right, null);
         this.Neighbors.set(Directions.Down, null);

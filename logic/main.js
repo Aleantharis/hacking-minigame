@@ -199,6 +199,10 @@ function startGame() {
 	canvas.classList.add("noCrsr");
 
 	logic = new GameLogic(0, 8, 4, function(success) { alert(success ? "yay" : "meh"); });
+
+	if(DEBUG) {
+		console.table(logic.circuitBoard);
+	}
 }
 
 document.onpointermove = handleMouseMove;
