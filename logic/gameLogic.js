@@ -130,7 +130,7 @@ class Tile {
         if (this.OpenEdges.indexOf(incomingFrom) > -1) {
             this.IsPowered = this.gameState.boardPowered;
             this.OpenEdges.forEach(edge => {
-                if(this.Neighbors[edge] !== null && this.Neighbors[edge].IsPowered !== this.gameState.boardPowered) {
+                if(this.Neighbors.get(edge) !== null && this.Neighbors.get(edge).IsPowered !== this.gameState.boardPowered) {
                     this.Neighbors[edge].power(Directions.inverse(edge));
                 }
             });
