@@ -97,6 +97,7 @@ class Tile {
     OpenEdges = [];
     IsPowered = false;
     gameState;
+    printColor;
 
     constructor(X, Y, gameState) {
         this.X = X;
@@ -212,26 +213,34 @@ class RotatingTile extends Tile {
 }
 
 class GoalTile extends Tile {
+    printColor = "goldenrod";
+
     OpenEdges = [Directions.Up, Directions.Right, Directions.Down, Directions.Left];
 
     power(incomingFrom) {
         this.gameState.goalPowered = true;
+        this.printColor = "gold";
     }
 }
 
 class TrapTile extends Tile {
+    printColor = "darkred";
+
     OpenEdges = [Directions.Up, Directions.Right, Directions.Down, Directions.Left];
 
     power(incomingFrom) {
         this.gameState.trapPowered = true;
+        this.printColor = "red";
     }
 }
 
 class PowerTile extends Tile {
+    printColor = "darkgreen";
     OpenEdges = [Directions.Up, Directions.Right, Directions.Down, Directions.Left];
 
     clickTrigger() {
         this.gameState.boardPowered = true;
+        this.printColor = "green";
         this.power();
     }
 }
