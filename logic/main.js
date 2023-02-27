@@ -37,7 +37,7 @@ function resizeCanvas() {
 	}
 
 	// Move coordinate origin to center of canvas
-	ctx.translate((canvas.width - (canvas.width * boardScaleX * BOARDSCALE)) / 2, (canvas.height - (canvas.height * boardScaleY * BOARDSCALE)) / 2);
+	ctx.translate((canvas.width - (canvas.width * boardScaleX * BOARDSCALE)) / 2, (canvas.height - (Math.min(canvas.height, canvas.width * boardScaleY) * BOARDSCALE)) / 2);
 }
 window.addEventListener("resize", resizeCanvas);
 window.addEventListener("orientationchange", resizeCanvas);
@@ -117,7 +117,7 @@ function drawDebug() {
 function draw() {
 	clearCanvas();
 
-	var tileSize = (canvasMinSize * BOARDSCALE) / Math.max(logic.gameState.sizeX, logic.gameState.sizeY);
+	var tileSize = Math.min(canvas.width / logic.gameState.sizeX, Math.min(canvas.height, canvas.width * boardScaleY) / logic.gameState.sizeY) * BOARDSCALE;
 
 	// draw test image
 	ctx.save();
@@ -127,10 +127,25 @@ function draw() {
 
 	ctx.beginPath();
 	ctx.save();
-	ctx.fillStyle = "Black";
-	ctx.fillRect(0, 0, canvas.width * boardScaleX * BOARDSCALE, canvas.height * boardScaleY * BOARDSCALE);
-	ctx.fillStyle = "Gray";
-	ctx.fillRect(0,0, tileSize, tileSize);
+	ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
+	ctx.fillRect(0, 0, canvas.width * boardScaleX * BOARDSCALE, Math.min(canvas.height, canvas.width * boardScaleY) * BOARDSCALE);
+
+	for (let i = 0; i < logic.gameState.sizeX; i++) {
+		for (let j = 0; j < logic.gameState.sizeY; j++) {
+			var rgbVal;
+
+			if(j % 2 === 0) {
+				rgbVal = (255 / logic.gameState.sizeX) * i;
+			}
+			else {
+				rgbVal = 255 - (255 / logic.gameState.sizeX) * i;
+			}
+
+			ctx.fillStyle = `rgb(${rgbVal}, ${rgbVal}, ${rgbVal})`
+
+			ctx.fillRect(i * tileSize, j* tileSize, tileSize, tileSize);
+		}
+	}
 	ctx.restore();
 	ctx.closePath();
 
