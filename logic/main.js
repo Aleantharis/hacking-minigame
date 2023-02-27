@@ -2,7 +2,14 @@ import { Constants as CONST } from "./const.js";
 import { Assets } from "./const.js";
 import { GameLogic } from "./gameLogic.js";
 
-const assetsLoaded = () => { document.getElementById("btnStart").disabled = false; console.log("assets loaded"); };
+const assetsLoaded = () => { 
+	document.getElementById("btnStart").disabled = false; 
+	console.log("assets loaded"); 
+	gameState = "Intro";
+	
+	// trigger resize to trigger redraw for intro
+	resizeCanvas();
+};
 const assets = new Assets({
 	test: "img/test.jpg"
 }, assetsLoaded);
@@ -20,8 +27,8 @@ var boardScaleX = 1;
 var boardScaleY = 1;
 var tileSize;
 
-// "Intro", "Running", "Success", "Failure"
-var gameState = "Intro";
+// "Loading", "Intro", "Running", "Success", "Failure"
+var gameState = "Loading";
 
 var mouseX = 0;
 var mouseY = 0;
