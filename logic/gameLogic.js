@@ -80,7 +80,7 @@ class Directions {
     }
 
     static random() {
-        return getByIndex(Math.floor(Math.random() * 4));
+        return Directions.getByIndex(Math.floor(Math.random() * 4));
     }
 }
 
