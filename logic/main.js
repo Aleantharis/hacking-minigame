@@ -158,48 +158,46 @@ function drawDebug() {
 function drawSuccess() {
 	draw();
 
-	// Draw gray overlay
-	ctx.save();
-	ctx.setTransform(1, 0, 0, 1, 0, 0);
-	ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
-	ctx.fillRect(0, 0, canvas.width, canvas.height);
-	ctx.restore();
-
+	drawTransparentOverlay();
 	// TODO: draw success window
 }
 
 function drawFailure() {
 	draw();
 
-	// Draw gray overlay
-	ctx.save();
-	ctx.setTransform(1, 0, 0, 1, 0, 0);
-	ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
-	ctx.fillRect(0, 0, canvas.width, canvas.height);
-	ctx.restore();
+	drawTransparentOverlay();
 
 	// TODO: draw failure window
 }
 
 function drawIntro() {
-	// Draw gray overlay
-	ctx.save();
-	ctx.setTransform(1, 0, 0, 1, 0, 0);
-	ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
-	ctx.fillRect(0, 0, canvas.width, canvas.height);
-	ctx.restore();
+	drawBackground();
+	drawTransparentOverlay();
 
 	// TODO: draw intro window
 }
 
-function draw() {
-	clearCanvas();
+function drawTransparentOverlay() {
+	// Draw gray overlay
+	ctx.save();
+	ctx.setTransform(1, 0, 0, 1, 0, 0);
+	ctx.fillStyle = "rgba(0, 0, 0, 0.4)";
+	ctx.fillRect(0, 0, canvas.width, canvas.height);
+	ctx.restore();
+}
 
+function drawBackground() {
 	// draw test image
 	ctx.save();
 	ctx.setTransform(1, 0, 0, 1, 0, 0);
 	ctx.drawImage(assets.getAsset("test"), 0, 0, canvas.width, canvas.height);
 	ctx.restore();
+}
+
+function draw() {
+	clearCanvas();
+
+	drawBackground();
 
 	ctx.beginPath();
 	ctx.save();
