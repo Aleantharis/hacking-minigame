@@ -19,6 +19,7 @@ var canvasMinSize = 0;
 const BOARDSCALE = 0.8;
 var boardScaleX = 1;
 var boardScaleY = 1;
+var tileSize;
 
 var logic;
 
@@ -36,8 +37,10 @@ function resizeCanvas() {
 		canvasMinSize = canvas.height;
 	}
 
-	// Move coordinate origin to center of canvas
-	ctx.translate((canvas.width - (canvas.width * boardScaleX * BOARDSCALE)) / 2, (canvas.height - (Math.min(canvas.height, canvas.width * boardScaleY) * BOARDSCALE)) / 2);
+	if(logic) {
+		tileSize = Math.min(canvas.width / logic.gameState.sizeX, Math.min(canvas.height, canvas.width * boardScaleY) / logic.gameState.sizeY) * BOARDSCALE;
+		ctx.translate((canvas.width - (tileSize * logic.gameState.sizeX)) / 2, (tileSize * logic.gameState.sizeY) / 2);
+	}
 }
 window.addEventListener("resize", resizeCanvas);
 window.addEventListener("orientationchange", resizeCanvas);
@@ -117,8 +120,6 @@ function drawDebug() {
 function draw() {
 	clearCanvas();
 
-	var tileSize = Math.min(canvas.width / logic.gameState.sizeX, Math.min(canvas.height, canvas.width * boardScaleY) / logic.gameState.sizeY) * BOARDSCALE;
-
 	// draw test image
 	ctx.save();
 	ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -128,7 +129,7 @@ function draw() {
 	ctx.beginPath();
 	ctx.save();
 	ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
-	ctx.fillRect(0, 0, canvas.width * boardScaleX * BOARDSCALE, Math.min(canvas.height, canvas.width * boardScaleY) * BOARDSCALE);
+	ctx.fillRect(0, 0, tileSize * logic.gameState.sizeX, tileSize * logic.gameState.sizeY);
 
 	for (let i = 0; i < logic.gameState.sizeX; i++) {
 		for (let j = 0; j < logic.gameState.sizeY; j++) {
