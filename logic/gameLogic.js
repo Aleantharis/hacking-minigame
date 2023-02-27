@@ -419,7 +419,7 @@ export class GameLogic {
                     var n = this.circuitBoard[i][j].getNeighborCoordinates(dir);
 
                     if (n.X >= 0 && n.X < sizeX && n.Y >= 0 && n.Y < sizeY) {
-                        this.circuitBoard[i][j].set(dir, this.circuitBoard[n.X][n.Y]);
+                        this.circuitBoard[i][j].Neighbors.set(dir, this.circuitBoard[n.X][n.Y]);
                     }
                 }
             }
