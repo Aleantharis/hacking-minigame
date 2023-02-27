@@ -29,7 +29,7 @@ var tileSize;
 
 // "Loading", "Intro", "Running", "Success", "Failure"
 var gameState = "Loading";
-var drawDialog = true;
+var isDialogRendered = true;
 
 var mouseX = 0;
 var mouseY = 0;
@@ -134,11 +134,11 @@ function pointerUpHandler(event) {
 			}
 			return;
 		case "Success":
-			drawDialog = !drawDialog;
+			isDialogRendered = !isDialogRendered;
 			drawSuccess();
 			return;
 		case "Failure":
-			drawDialog = !drawDialog;
+			isDialogRendered = !isDialogRendered;
 			drawFailure();
 			return;
 		case "Intro":
@@ -179,22 +179,10 @@ function drawSuccess() {
 	draw();
 	drawTransparentOverlay();
 	// TODO: draw success window
+	if (isDialogRendered) {
+		drawDialog("HACK SUCCESSFUL", "(Click to hide overlay)", "darkgreen");
+	}
 
-	ctx.save();
-	ctx.setTransform(1, 0, 0, 1, 0, 0);
-	ctx.translate(canvas.width - (canvasMinSize * BOARDSCALE), canvas.height - (canvasMinSize * BOARDSCALE));
-	ctx.fillStyle = "rgba(0, 0, 0, 0.4)";
-	ctx.fillRect(0, 0, canvasMinSize * BOARDSCALE, canvasMinSize * BOARDSCALE);
-
-	ctx.font = Math.floor(canvas.canvasMinSize * BOARDSCALE * 0.5) + "px Segoe UI";
-	ctx.fillStyle = "darkgreen";
-	ctx.textBaseline = "top";
-	ctx.fillText("HACK SUCCESSFUL", 0, 0, canvasMinSize * BOARDSCALE);
-
-	ctx.font = Math.floor(canvas.canvasMinSize * BOARDSCALE * 0.25) + "px Segoe UI";
-	ctx.textBaseline = "bottom";
-	ctx.fillText("(Click to hide overlay)", 0, canvasMinSize * BOARDSCALE, canvasMinSize * BOARDSCALE);
-	ctx.restore();
 
 	// HACK SUCCESSFUL
 	// (click here to hide overlay)
@@ -210,21 +198,9 @@ function drawFailure() {
 	// You triggered a trap
 	// (click here to hide overlay)
 
-	ctx.save();
-	ctx.setTransform(1, 0, 0, 1, 0, 0);
-	ctx.translate(canvas.width - (canvasMinSize * BOARDSCALE), canvas.height - (canvasMinSize * BOARDSCALE));
-	ctx.fillStyle = "rgba(0, 0, 0, 0.4)";
-	ctx.fillRect(0, 0, canvasMinSize * BOARDSCALE, canvasMinSize * BOARDSCALE);
-
-	ctx.font = Math.floor(canvas.canvasMinSize * BOARDSCALE * 0.5) + "px Segoe UI";
-	ctx.fillStyle = "darkred";
-	ctx.textBaseline = "top";
-	ctx.fillText("TRAP TRIGGERED - HACK FAILED", 0, 0, canvasMinSize * BOARDSCALE);
-	
-	ctx.font = Math.floor(canvas.canvasMinSize * BOARDSCALE * 0.25) + "px Segoe UI";
-	ctx.textBaseline = "bottom";
-	ctx.fillText("(Click to hide overlay)", 0, canvasMinSize * BOARDSCALE, canvasMinSize * BOARDSCALE);
-	ctx.restore();
+	if (isDialogRendered) {
+		drawDialog("TRAP TRIGGERED - HACK FAILED", "(Click to hide overlay)", "darkred");
+	}
 }
 
 function drawIntro() {
@@ -232,6 +208,26 @@ function drawIntro() {
 	drawTransparentOverlay();
 
 	// TODO: draw intro window
+
+	drawDialog("HACKING MINIGAME", "Rotate the tiles by clicking them. Connect the two circles to succeed. Avoid red traps.", "gold")
+}
+
+function drawDialog(firstLine, secondLine, fillStyle) {
+	ctx.save();
+	ctx.setTransform(1, 0, 0, 1, 0, 0);
+	ctx.translate((canvas.width - (canvasMinSize * BOARDSCALE)) / 2, (canvas.height - (canvasMinSize * BOARDSCALE) / 2));
+	ctx.fillStyle = "rgba(0, 0, 0, 0.4)";
+	ctx.fillRect(0, 0, canvasMinSize * BOARDSCALE, canvasMinSize * BOARDSCALE);
+
+	ctx.font = Math.floor(canvas.canvasMinSize * BOARDSCALE * 0.5) + "px Segoe UI";
+	ctx.fillStyle = fillStyle;
+	ctx.textBaseline = "top";
+	ctx.fillText(firstLine, 0, 0, canvasMinSize * BOARDSCALE);
+
+	ctx.font = Math.floor(canvas.canvasMinSize * BOARDSCALE * 0.25) + "px Segoe UI";
+	ctx.textBaseline = "bottom";
+	ctx.fillText(secondLine, 0, canvasMinSize * BOARDSCALE, canvasMinSize * BOARDSCALE);
+	ctx.restore();
 }
 
 function drawTransparentOverlay() {
@@ -331,7 +327,7 @@ function stopGame(win) {
 		gameState = win ? "Success" : "Failure";
 	}
 
-	drawDialog = true;
+	isDialogRendered = true;
 
 	clearInterval(gameLoop);
 	document.getElementById("sDiff").disabled = false;
