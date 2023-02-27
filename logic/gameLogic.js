@@ -203,7 +203,7 @@ class Tile {
     }
 
     getPrintColor() {
-        if(this.IsPowered) {
+        if (this.IsPowered) {
             return "cyan";
         }
         return undefined;
@@ -212,13 +212,16 @@ class Tile {
 
 class RotatingTile extends Tile {
     clickTrigger() {
-        temp = [];
-        this.OpenEdges.forEach(element => temp += Direction.rotate(element, true));
-        this.OpenEdges = temp;
+        // Only allow rotation when board is not powered
+        if (!this.gameState.boardPowered) {
+            var temp = [];
+            this.OpenEdges.forEach(element => temp += Directions.rotate(element, true));
+            this.OpenEdges = temp;
+        }
     }
 
     getPrintColor() {
-        if(this.IsPowered) {
+        if (this.IsPowered) {
             return "cyan";
         }
         return "powderblue";
@@ -237,7 +240,7 @@ class GoalTile extends Tile {
     }
 
     getPrintColor() {
-        if(this.IsPowered) {
+        if (this.IsPowered) {
             return "gold";
         }
         return "goldenrod";
@@ -256,7 +259,7 @@ class TrapTile extends Tile {
     }
 
     getPrintColor() {
-        if(this.IsPowered) {
+        if (this.IsPowered) {
             return "red";
         }
         return "darkred";
@@ -276,7 +279,7 @@ class PowerTile extends Tile {
     }
 
     getPrintColor() {
-        if(this.IsPowered) {
+        if (this.IsPowered) {
             return "green";
         }
         return "darkgreen";
