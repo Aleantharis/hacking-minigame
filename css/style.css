@@ -78,7 +78,7 @@ label, output {
 	text-align: center;
 }
 
-.pnlLives {
+.pnlSize {
     display: inline-flex;
     flex-direction: column;
     border: 1px solid white;

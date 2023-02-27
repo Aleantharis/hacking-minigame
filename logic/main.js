@@ -14,7 +14,6 @@ var canvas = document.getElementById("cvGame");
 var ctx = canvas.getContext("2d");
 var gameLoop;
 var difficulty = 0;
-var lives = 1;
 var canvasMinSize = 0;
 const BOARDSCALE = 0.8;
 var boardScaleX = 1;
@@ -22,6 +21,15 @@ var boardScaleY = 1;
 var tileSize;
 
 var logic;
+
+var boardSizeIdx = 0;
+const boardSizes = [
+	{ string: "4x4", X: 4, Y:4},
+	{ string: "8x4", X: 8, Y:4},
+	{ string: "8x8", X: 8, Y:8},
+	{ string: "12x8", X: 12, Y:8},
+	{ string: "12x12", X: 12, Y:12}
+];
 
 resizeCanvas();
 // Attempt at auto-resize
@@ -37,10 +45,8 @@ function resizeCanvas() {
 		canvasMinSize = canvas.height;
 	}
 
-	if(logic) {
-		tileSize = Math.min(canvas.width / logic.gameState.sizeX, Math.min(canvas.height, canvas.width * boardScaleY) / logic.gameState.sizeY) * BOARDSCALE;
-		ctx.translate((canvas.width - (tileSize * logic.gameState.sizeX)) / 2, (tileSize * logic.gameState.sizeY) / 2);
-	}
+	tileSize = Math.min(canvas.width / boardSizes[boardSizeIdx].X, Math.min(canvas.height, canvas.width * boardScaleY) / boardSizes[boardSizeIdx].Y) * BOARDSCALE;
+	ctx.translate((canvas.width - (tileSize * boardSizes[boardSizeIdx].X)) / 2, (canvas.height - (tileSize * boardSizes[boardSizeIdx].Y)) / 2);
 }
 window.addEventListener("resize", resizeCanvas);
 window.addEventListener("orientationchange", resizeCanvas);
@@ -129,17 +135,17 @@ function draw() {
 	ctx.beginPath();
 	ctx.save();
 	ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
-	ctx.fillRect(0, 0, tileSize * logic.gameState.sizeX, tileSize * logic.gameState.sizeY);
+	ctx.fillRect(0, 0, tileSize * boardSizes[boardSizeIdx].X, tileSize * boardSizes[boardSizeIdx].Y);
 
-	for (let i = 0; i < logic.gameState.sizeX; i++) {
-		for (let j = 0; j < logic.gameState.sizeY; j++) {
+	for (let i = 0; i < boardSizes[boardSizeIdx].X; i++) {
+		for (let j = 0; j < boardSizes[boardSizeIdx].Y; j++) {
 			var rgbVal;
 
 			if(j % 2 === 0) {
-				rgbVal = (255 / logic.gameState.sizeX) * i;
+				rgbVal = (255 / boardSizes[boardSizeIdx].X) * i;
 			}
 			else {
-				rgbVal = 255 - (255 / logic.gameState.sizeX) * i;
+				rgbVal = 255 - (255 / boardSizes[boardSizeIdx].X) * i;
 			}
 
 			ctx.fillStyle = `rgb(${rgbVal}, ${rgbVal}, ${rgbVal})`
@@ -193,7 +199,7 @@ function startGameHandler(event) {
 function stopGame() {
 	clearInterval(gameLoop);
 	document.getElementById("sDiff").disabled = false;
-	document.getElementById("inLives").disabled = false;
+	document.getElementById("inSize").disabled = false;
 	document.getElementById("btnStart").value = "Start";
 	document.getElementById("fMenu").onsubmit = startGameHandler;
 	// canvas.classList.remove("noCrsr");
@@ -204,33 +210,36 @@ function stopGame() {
 	}
 }
 
-function livesInputChangeHandler(event) {
-	lives = document.getElementById("inLives").value;
-	renderLives();
+function boardSizeInputChangeHandler(event) {
+	boardSizeIdx = document.getElementById("inSize").value;
+	renderBoardSizeLabel();
 }
 
-function renderLives() {
-	var out = "Lives: " + lives;
-	document.getElementById("lblLives").innerHTML = out;
+function renderBoardSizeLabel() {
+	var out = "Size: " + boardSizes[boardSizeIdx];
+	document.getElementById("lblSize").innerHTML = out;
 }
 
 function startGame() {
 	console.log("difficulty: " + difficulty);
 
-	lives = document.getElementById("inLives").value;
+	boardSizeIdx = document.getElementById("inSize").value;
 
 	gameLoop = setInterval(draw, 10);
 
 	document.getElementById("sDiff").disabled = true;
-	document.getElementById("inLives").disabled = true;
-	renderLives();
+	document.getElementById("inSize").disabled = true;
+	renderBoardSizeLabel();
 	document.getElementById("btnStart").value = "Stop";
 	document.getElementById("fMenu").onsubmit = stopGameHandler;
 	// canvas.classList.add("noCrsr");
 
-	logic = new GameLogic(0, 8, 4, function(success) { alert(success ? "yay" : "meh"); });
+	logic = new GameLogic(0, boardSizes[boardSizeIdx].X, boardSizes[boardSizeIdx].Y, function(success) { alert(success ? "yay" : "meh"); });
 
-	boardScaleY = logic.gameState.sizeY / logic.gameState.sizeX;
+	boardScaleY = boardSizes[boardSizeIdx].Y / boardSizes[boardSizeIdx].X;
+
+	// force resize to recalc tilesize
+	resizeCanvas();
 
 	if(DEBUG) {
 		console.table(logic.circuitBoard);
@@ -239,4 +248,4 @@ function startGame() {
 
 document.onpointermove = handleMouseMove;
 document.getElementById("fMenu").onsubmit = startGameHandler;
-document.getElementById("inLives").oninput = livesInputChangeHandler;
+document.getElementById("inSize").oninput = boardSizeInputChangeHandler;
