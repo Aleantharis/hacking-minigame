@@ -248,13 +248,17 @@ class DifficultySettings {
 
 class GameState {
     difficulty;
+    sizeX;
+    sizeY;
     boardPowered = false;
     goalPowered = false;
     trapPowered = false;
     DEBUG = true;
 
-    constructor(difficulty) {
+    constructor(difficulty, sizeX, sizeY) {
         this.difficulty = difficulty;
+        this.sizeX = sizeX;
+        this.sizeY = sizeY;
     }
 }
 
@@ -270,7 +274,7 @@ export class GameLogic {
     gameOverTrigger;
 
     constructor(difficulty, sizeX, sizeY, gameOverTrigger) {
-        this.gameState = new GameState(difficulty);
+        this.gameState = new GameState(difficulty, sizeX, sizeY);
         this.gameOverTrigger = gameOverTrigger;
 
         // init game board
@@ -299,6 +303,7 @@ export class GameLogic {
         }
 
         var powerTile = new PowerTile(tempX, tempY);
+        ///TODO: Change How goal is spawned in relation to power - also maybe spawn more than one goal (adapt gamestate victory checks)
         var goalTile = new GoalTile(sizeX - tempX - 1, sizeY - tempY - 1);
 
         this.circuitBoard[tempX][tempY] = powerTile;

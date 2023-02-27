@@ -16,6 +16,7 @@ var gameLoop;
 var difficulty = 0;
 var lives = 1;
 var canvasMinSize = 0;
+const BOARDSCALE = 0.8;
 
 var logic;
 
@@ -25,8 +26,6 @@ function resizeCanvas() {
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight - (document.getElementById("fMenu").offsetHeight + CONST.canvasHeightMargin);
 
-	// Move coordinate origin to center of canvas
-	ctx.translate(canvas.width / 2, canvas.height / 2);
 
 	if (canvas.width < canvas.height) {
 		canvasMinSize = canvas.width;
@@ -35,6 +34,8 @@ function resizeCanvas() {
 		canvasMinSize = canvas.height;
 	}
 
+	// Move coordinate origin to center of canvas
+	ctx.translate((canvas.width - (canvasMinSize * BOARDSCALE)) / 2, (canvas.height - (canvasMinSize * BOARDSCALE)) / 2);
 }
 window.addEventListener("resize", resizeCanvas);
 window.addEventListener("orientationchange", resizeCanvas);
@@ -114,11 +115,22 @@ function drawDebug() {
 function draw() {
 	clearCanvas();
 
+	var tileSize = (canvasMinSize * BOARDSCALE) / Math.min(logic.gameState.sizeX, logic.gameState.sizeY);
+
 	// draw test image
 	ctx.save();
 	ctx.setTransform(1, 0, 0, 1, 0, 0);
 	ctx.drawImage(assets.getAsset("test"), 0, 0, canvas.width, canvas.height);
 	ctx.restore();
+
+	ctx.beginPath();
+	ctx.save();
+	ctx.fillStyle = "Black";
+	ctx.fillRect(0, 0, canvasMinSize * BOARDSCALE, canvasMinSize * BOARDSCALE);
+	ctx.fillStyle = "Gray";
+	ctx.fillRect(0,0, tileSize, tileSize);
+	ctx.restore();
+	ctx.closePath();
 
 	if (DEBUG) {
 		drawDebug();
@@ -166,7 +178,7 @@ function stopGame() {
 	document.getElementById("inLives").disabled = false;
 	document.getElementById("btnStart").value = "Start";
 	document.getElementById("fMenu").onsubmit = startGameHandler;
-	canvas.classList.remove("noCrsr");
+	// canvas.classList.remove("noCrsr");
 
 	// clear out touchpoints 
 	if(touchPoints.length > 0) {
@@ -196,7 +208,7 @@ function startGame() {
 	renderLives();
 	document.getElementById("btnStart").value = "Stop";
 	document.getElementById("fMenu").onsubmit = stopGameHandler;
-	canvas.classList.add("noCrsr");
+	// canvas.classList.add("noCrsr");
 
 	logic = new GameLogic(0, 8, 4, function(success) { alert(success ? "yay" : "meh"); });
 
