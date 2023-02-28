@@ -256,6 +256,12 @@ class GoalTile extends Tile {
 class TrapTile extends Tile {
     OpenEdges = [Directions.Up, Directions.Right, Directions.Down, Directions.Left];
 
+    constructor(tile) {
+        super(tile.X, tile.Y, tile.gameState);
+
+        this.Neighbors = tile.Neighbors;
+    }
+
     power(incomingFrom) {
         this.IsPowered = this.gameState.boardPowered;
         this.gameState.trapPowered = this.gameState.boardPowered;
@@ -295,7 +301,7 @@ class PowerTile extends Tile {
 
 class DifficultySettings {
     fixedTilePercentage;
-    trapTileAmount;
+    trapTileAmount; //percentage of max tiles
 
     constructor(fixedTilePercentage, trapTileAmount) {
         this.fixedTilePercentage = fixedTilePercentage;
@@ -322,8 +328,8 @@ class GameState {
 export class GameLogic {
     static difficultyValues = {
         0: new DifficultySettings(0.2, 0),
-        1: new DifficultySettings(0.35, 1),
-        2: new DifficultySettings(0.45, 2)
+        1: new DifficultySettings(0.35, 0.1),
+        2: new DifficultySettings(0.45, 0.2)
     }
 
     circuitBoard;
@@ -365,23 +371,6 @@ export class GameLogic {
 
         this.circuitBoard[tempX][tempY] = powerTile;
         this.circuitBoard[goalTile.X][goalTile.Y] = goalTile;
-
-        // Init trap tiles
-        var trapTiles = 0;
-        while (trapTiles < GameLogic.difficultyValues[difficulty].trapTileAmount) {
-            var trapX = -1;
-            var trapY = -1;
-
-            // TODO: prevent traps from spawning next to power node & next to 4-direction blocks
-
-            do {
-                trapX = Math.floor(Math.random() * sizeX);
-                trapY = Math.floor(Math.random() * sizeY);
-            } while (this.circuitBoard[trapX][trapY] !== undefined);
-
-            this.circuitBoard[trapX][trapY] = new TrapTile(trapX, trapY, this.gameState);
-            trapTiles++;
-        }
 
         var maxFixedTiles = sizeX * sizeY * GameLogic.difficultyValues[difficulty].fixedTilePercentage;
 
@@ -428,7 +417,27 @@ export class GameLogic {
         }
 
         // TODO: Sanity-check, if puzzle is even possible
+
+        // Init trap tiles after links are made to make sanity checks easier
+
+        var maxTrapTiles = sizeX * sizeY * GameLogic.difficultyValues[difficulty].trapTileAmount;
+        for (;maxTrapTiles > 0; maxTrapTiles--) {
+            var trapX = -1;
+            var trapY = -1;
+
+            do {
+                trapX = Math.floor(Math.random() * sizeX);
+                trapY = Math.floor(Math.random() * sizeY);
+            } while (this.circuitBoard[trapX][trapY] instanceof GoalTile ||
+                    this.circuitBoard[trapX][trapY] instanceof PowerTile ||
+                    this.circuitBoard[trapX][trapY].Neighbors.values().filter(t => t instanceof PowerTile || t instanceof GoalTile || t.OpenEdges.length > 2)
+            );
+
+            this.circuitBoard[trapX][trapY] = new TrapTile(this.circuitBoard[trapX][trapY]);
+        }
     }
+
+
 
     boardInteraction(x, y) {
         this.circuitBoard[x][y].clickTrigger();
