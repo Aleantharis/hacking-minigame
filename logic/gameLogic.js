@@ -390,9 +390,9 @@ export class GameLogic {
 
                     // Add random amount of open edges to tile
                     // bias the randomness - 1/6 2/6 3/6 - maybe factor in difficulty
-                    var ran = Math.floor(Math.random() * 10);
+                    var ran = Math.floor(Math.random() * 100);
                     // i am too stupid to create a mathematical formula for this
-                    var edgeAmnt = (ran < 6 ? 0 : ran < 9 ? 1 : 2) + 2;
+                    var edgeAmnt = (ran < 70 ? 0 : ran < 90 ? 1 : 2) + 2;
                     for (let k = 0; k < edgeAmnt; k++) {
                         temp.OpenEdges.push(Directions.getRandomMissingDirection(temp.OpenEdges));
                     }
@@ -422,9 +422,9 @@ export class GameLogic {
         var possibleTrapCoords = [];
         for (let i = 0; i < sizeX; i++) {
             for (let j = 0; j < sizeY; j++) {
-                if (this.circuitBoard[i][j] instanceof GoalTile ||
-                    this.circuitBoard[i][j] instanceof PowerTile ||
-                    [...this.circuitBoard[i][j].Neighbors].filter(([n, t]) => (t !== null) && (t instanceof PowerTile || t instanceof GoalTile || t.OpenEdges.length > 2))) {
+                if (!this.circuitBoard[i][j] instanceof GoalTile &&
+                    !this.circuitBoard[i][j] instanceof PowerTile &&
+                    ![...this.circuitBoard[i][j].Neighbors].filter(([n, t]) => (t !== null) && (t instanceof PowerTile || t instanceof GoalTile || t.OpenEdges.length > 2))) {
                     possibleTrapCoords.push({ X: i, Y: j });
                 }
             }
@@ -433,18 +433,7 @@ export class GameLogic {
         var maxTrapTiles = Math.min(Math.floor(sizeX * sizeY * GameLogic.difficultyValues[difficulty].trapTileAmount), possibleTrapCoords.length);
         for (;maxTrapTiles > 0; maxTrapTiles--) {
             var tr = possibleTrapCoords.splice(Math.floor(Math.random() * possibleTrapCoords.length), 1);
-            var trapX = tr.X;
-            var trapY = tr.Y;
-
-            do {
-                trapX = Math.floor(Math.random() * sizeX);
-                trapY = Math.floor(Math.random() * sizeY);
-            } while (this.circuitBoard[trapX][trapY] instanceof GoalTile ||
-            this.circuitBoard[trapX][trapY] instanceof PowerTile ||
-                [...this.circuitBoard[trapX][trapY].Neighbors].filter(([n, t]) => (t !== null) && (t instanceof PowerTile || t instanceof GoalTile || t.OpenEdges.length > 2))
-            );
-
-            this.circuitBoard[trapX][trapY] = new TrapTile(this.circuitBoard[trapX][trapY]);
+            this.circuitBoard[tr.X][tr.Y] = new TrapTile(this.circuitBoard[tr.X][tr.Y]);
         }
     }
 
