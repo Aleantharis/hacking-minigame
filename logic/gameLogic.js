@@ -422,41 +422,20 @@ export class GameLogic {
         var possibleTrapCoords = [];
         for (let i = 0; i < sizeX; i++) {
             for (let j = 0; j < sizeY; j++) {
-                if (!this.circuitBoard[i][j] instanceof GoalTile &&
-                    !this.circuitBoard[i][j] instanceof PowerTile &&
-                    Array.from(this.circuitBoard[x][y].Neighbors.values()).filter((n) => n !== null && n.OpenEdges.length > 3).length === 0) {
-                    // if(this.#isLegalTrapField(i, j)) {
+                if (!(this.circuitBoard[i][j] instanceof GoalTile) &&
+                    !(this.circuitBoard[i][j] instanceof PowerTile) &&
+                    Array.from(this.circuitBoard[i][j].Neighbors.values()).filter((n) => n !== null && n.OpenEdges.length > 3).length === 0) {
                     possibleTrapCoords.push({ X: i, Y: j });
                 }
             }
         }
 
         var maxTrapTiles = Math.min(Math.floor(sizeX * sizeY * GameLogic.difficultyValues[difficulty].trapTileAmount), possibleTrapCoords.length);
-        for (;maxTrapTiles > 0; maxTrapTiles--) {
+        for (; maxTrapTiles > 0; maxTrapTiles--) {
             var tr = possibleTrapCoords.splice(Math.floor(Math.random() * possibleTrapCoords.length), 1)[0];
             this.circuitBoard[tr.X][tr.Y] = new TrapTile(this.circuitBoard[tr.X][tr.Y]);
         }
     }
-
-    // #isLegalTrapField(x, y) {
-    //     if(this.circuitBoard[x][y] instanceof GoalTile || this.circuitBoard[x][y] instanceof PowerTile) {
-    //         return false; 
-    //     }
-
-    //     this.circuitBoard[x][y].Neighbors.forEach((v, k) => {
-    //         if(v !== null) {
-    //             if(v instanceof PowerTile || v instanceof GoalTile) {
-    //                 return false;
-    //             }
-
-    //             if(v.OpenEdges.length > 3) {
-    //                 return false;
-    //             }
-    //         }
-    //     });
-
-    //     return true;
-    // }
 
     boardInteraction(x, y) {
         this.circuitBoard[x][y].clickTrigger();
