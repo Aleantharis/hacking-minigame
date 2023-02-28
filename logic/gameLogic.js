@@ -262,7 +262,9 @@ class TrapTile extends Tile {
         this.Neighbors = tile.Neighbors;
 
         this.Neighbors.forEach((n, dir) => {
-            n.Neighbors.set(Directions.inverse(dir), this);
+            if (n !== null) {
+                n.Neighbors.set(Directions.inverse(dir), this);
+            }
         });
     }
 
