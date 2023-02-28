@@ -422,9 +422,9 @@ export class GameLogic {
         var possibleTrapCoords = [];
         for (let i = 0; i < sizeX; i++) {
             for (let j = 0; j < sizeY; j++) {
-                if (this.circuitBoard[trapX][trapY] instanceof GoalTile ||
-                    this.circuitBoard[trapX][trapY] instanceof PowerTile ||
-                    [...this.circuitBoard[trapX][trapY].Neighbors].filter(([n, t]) => (t !== null) && (t instanceof PowerTile || t instanceof GoalTile || t.OpenEdges.length > 2))) {
+                if (this.circuitBoard[i][j] instanceof GoalTile ||
+                    this.circuitBoard[i][j] instanceof PowerTile ||
+                    [...this.circuitBoard[i][j].Neighbors].filter(([n, t]) => (t !== null) && (t instanceof PowerTile || t instanceof GoalTile || t.OpenEdges.length > 2))) {
                     possibleTrapCoords.push({ X: i, Y: j });
                 }
             }
