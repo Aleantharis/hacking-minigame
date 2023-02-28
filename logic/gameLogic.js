@@ -372,7 +372,7 @@ export class GameLogic {
         this.circuitBoard[tempX][tempY] = powerTile;
         this.circuitBoard[goalTile.X][goalTile.Y] = goalTile;
 
-        var maxFixedTiles = sizeX * sizeY * GameLogic.difficultyValues[difficulty].fixedTilePercentage;
+        var maxFixedTiles = Math.round(sizeX * sizeY * GameLogic.difficultyValues[difficulty].fixedTilePercentage);
 
         // Init Rest of tiles
         for (let i = 0; i < sizeX; i++) {
@@ -420,7 +420,7 @@ export class GameLogic {
 
         // Init trap tiles after links are made to make sanity checks easier
 
-        var maxTrapTiles = sizeX * sizeY * GameLogic.difficultyValues[difficulty].trapTileAmount;
+        var maxTrapTiles = Math.floor(sizeX * sizeY * GameLogic.difficultyValues[difficulty].trapTileAmount);
         for (;maxTrapTiles > 0; maxTrapTiles--) {
             var trapX = -1;
             var trapY = -1;
