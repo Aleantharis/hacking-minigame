@@ -419,18 +419,29 @@ export class GameLogic {
         // TODO: Sanity-check, if puzzle is even possible
 
         // Init trap tiles after links are made to make sanity checks easier
+        var possibleTrapCoords = [];
+        for (let i = 0; i < sizeX; i++) {
+            for (let j = 0; j < sizeY; j++) {
+                if (this.circuitBoard[trapX][trapY] instanceof GoalTile ||
+                    this.circuitBoard[trapX][trapY] instanceof PowerTile ||
+                    [...this.circuitBoard[trapX][trapY].Neighbors].filter(([n, t]) => (t !== null) && (t instanceof PowerTile || t instanceof GoalTile || t.OpenEdges.length > 2))) {
+                    possibleTrapCoords.push({ X: i, Y: j });
+                }
+            }
+        }
 
-        var maxTrapTiles = Math.floor(sizeX * sizeY * GameLogic.difficultyValues[difficulty].trapTileAmount);
+        var maxTrapTiles = Math.min(Math.floor(sizeX * sizeY * GameLogic.difficultyValues[difficulty].trapTileAmount), possibleTrapCoords.length);
         for (;maxTrapTiles > 0; maxTrapTiles--) {
-            var trapX = -1;
-            var trapY = -1;
+            var tr = possibleTrapCoords.splice(Math.floor(Math.random() * possibleTrapCoords.length), 1);
+            var trapX = tr.X;
+            var trapY = tr.Y;
 
             do {
                 trapX = Math.floor(Math.random() * sizeX);
                 trapY = Math.floor(Math.random() * sizeY);
             } while (this.circuitBoard[trapX][trapY] instanceof GoalTile ||
-                    this.circuitBoard[trapX][trapY] instanceof PowerTile ||
-                    [...this.circuitBoard[trapX][trapY].Neighbors].filter(([n, t]) => (t !== null) && (t instanceof PowerTile || t instanceof GoalTile || t.OpenEdges.length > 2))
+            this.circuitBoard[trapX][trapY] instanceof PowerTile ||
+                [...this.circuitBoard[trapX][trapY].Neighbors].filter(([n, t]) => (t !== null) && (t instanceof PowerTile || t instanceof GoalTile || t.OpenEdges.length > 2))
             );
 
             this.circuitBoard[trapX][trapY] = new TrapTile(this.circuitBoard[trapX][trapY]);
