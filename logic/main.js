@@ -204,7 +204,7 @@ function drawIntro() {
 	drawBackground();
 	drawTransparentOverlay();
 
-	drawDialog("HACKING MINIGAME", "Rotate the tiles by clicking them. Connect the two circles to succeed. Avoid red traps.", "gold")
+	drawDialog("HACKING MINIGAME", "Rotate the tiles by clicking them. Connect the two circles to succeed. Avoid red tiles.", "gold")
 }
 
 function drawDialog(firstLine, secondLine, fillStyle) {

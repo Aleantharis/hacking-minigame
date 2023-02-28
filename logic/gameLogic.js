@@ -422,10 +422,10 @@ export class GameLogic {
         var possibleTrapCoords = [];
         for (let i = 0; i < sizeX; i++) {
             for (let j = 0; j < sizeY; j++) {
-                // if (!this.circuitBoard[i][j] instanceof GoalTile &&
-                //     !this.circuitBoard[i][j] instanceof PowerTile &&
-                //     [...this.circuitBoard[i][j].Neighbors].filter(([n, t]) => (t !== null) && (t instanceof PowerTile || t instanceof GoalTile || t.OpenEdges.length > 3)).length === 0) {
-                    if(this.#isLegalTrapField(i, j)) {
+                if (!this.circuitBoard[i][j] instanceof GoalTile &&
+                    !this.circuitBoard[i][j] instanceof PowerTile &&
+                    Array.from(this.circuitBoard[x][y].Neighbors.values()).filter((n) => n !== null && n.OpenEdges.length > 3).length === 0) {
+                    // if(this.#isLegalTrapField(i, j)) {
                     possibleTrapCoords.push({ X: i, Y: j });
                 }
             }
@@ -438,25 +438,25 @@ export class GameLogic {
         }
     }
 
-    #isLegalTrapField(x, y) {
-        if(this.circuitBoard[x][y] instanceof GoalTile || this.circuitBoard[x][y] instanceof PowerTile) {
-            return false; 
-        }
+    // #isLegalTrapField(x, y) {
+    //     if(this.circuitBoard[x][y] instanceof GoalTile || this.circuitBoard[x][y] instanceof PowerTile) {
+    //         return false; 
+    //     }
 
-        this.circuitBoard[x][y].Neighbors.forEach((v, k) => {
-            if(v !== null) {
-                if(v instanceof PowerTile || v instanceof GoalTile) {
-                    return false;
-                }
+    //     this.circuitBoard[x][y].Neighbors.forEach((v, k) => {
+    //         if(v !== null) {
+    //             if(v instanceof PowerTile || v instanceof GoalTile) {
+    //                 return false;
+    //             }
 
-                if(v.OpenEdges.length > 3) {
-                    return false;
-                }
-            }
-        });
+    //             if(v.OpenEdges.length > 3) {
+    //                 return false;
+    //             }
+    //         }
+    //     });
 
-        return true;
-    }
+    //     return true;
+    // }
 
     boardInteraction(x, y) {
         this.circuitBoard[x][y].clickTrigger();
