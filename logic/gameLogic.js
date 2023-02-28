@@ -430,7 +430,7 @@ export class GameLogic {
                 trapY = Math.floor(Math.random() * sizeY);
             } while (this.circuitBoard[trapX][trapY] instanceof GoalTile ||
                     this.circuitBoard[trapX][trapY] instanceof PowerTile ||
-                    this.circuitBoard[trapX][trapY].Neighbors.values().filter(t => t instanceof PowerTile || t instanceof GoalTile || t.OpenEdges.length > 2)
+                    [...this.circuitBoard[trapX][trapY].Neighbors].filter(([n, t]) => t instanceof PowerTile || t instanceof GoalTile || t.OpenEdges.length > 2)
             );
 
             this.circuitBoard[trapX][trapY] = new TrapTile(this.circuitBoard[trapX][trapY]);
