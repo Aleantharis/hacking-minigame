@@ -433,7 +433,7 @@ export class GameLogic {
 
         var maxTrapTiles = Math.min(Math.floor(sizeX * sizeY * GameLogic.difficultyValues[difficulty].trapTileAmount), possibleTrapCoords.length);
         for (;maxTrapTiles > 0; maxTrapTiles--) {
-            var tr = possibleTrapCoords.splice(Math.floor(Math.random() * possibleTrapCoords.length), 1);
+            var tr = possibleTrapCoords.splice(Math.floor(Math.random() * possibleTrapCoords.length), 1)[0];
             this.circuitBoard[tr.X][tr.Y] = new TrapTile(this.circuitBoard[tr.X][tr.Y]);
         }
     }
