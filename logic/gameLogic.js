@@ -131,9 +131,7 @@ class Tile {
         return tmp;
     }
 
-    copy() {
-        const tmp = new this(this.X, this.Y, this.gameState);
-
+    deepCopy(tmp) {
         this.OpenEdges.forEach(e => {
             tmp.OpenEdges.push(e);
         });
@@ -150,6 +148,11 @@ class Tile {
         });
 
         return tmp;
+    }
+
+    copy() {
+        const tmp = new Tile(this.X, this.Y, this.gameState);
+        return deepCopy(tmp);
     }
 
     getNeighborCoordinates(direction) {
@@ -267,6 +270,11 @@ class RotatingTile extends Tile {
         }
     }
 
+    copy() {
+        const tmp = new RotatingTile(this.X, this.Y, this.gameState);
+        return deepCopy(tmp);
+    }
+
     getPrintColor() {
         if (this.IsPowered) {
             return "cyan";
@@ -277,6 +285,11 @@ class RotatingTile extends Tile {
 
 class GoalTile extends Tile {
     OpenEdges = [Directions.Up, Directions.Right, Directions.Down, Directions.Left];
+
+    copy() {
+        const tmp = new GoalTile(this.X, this.Y, this.gameState);
+        return deepCopy(tmp);
+    }
 
     power(incomingFrom) {
         this.IsPowered = this.gameState.boardPowered;
@@ -301,13 +314,20 @@ class TrapTile extends Tile {
     constructor(tile) {
         super(tile.X, tile.Y, tile.gameState);
 
-        this.Neighbors = tile.Neighbors;
+        if (!(tile instanceof TrapTile)) {
+            this.Neighbors = tile.Neighbors;
 
-        this.Neighbors.forEach((n, dir) => {
-            if (n !== null) {
-                n.Neighbors.set(Directions.inverse(dir), this);
-            }
-        });
+            this.Neighbors.forEach((n, dir) => {
+                if (n !== null) {
+                    n.Neighbors.set(Directions.inverse(dir), this);
+                }
+            });
+        }
+    }
+
+    copy() {
+        const tmp = new TrapTile(this);
+        return deepCopy(tmp);
     }
 
     power(incomingFrom) {
@@ -329,6 +349,11 @@ class TrapTile extends Tile {
 
 class PowerTile extends Tile {
     OpenEdges = [Directions.Up, Directions.Right, Directions.Down, Directions.Left];
+
+    copy() {
+        const tmp = new PowerTile(this.X, this.Y, this.gameState);
+        return deepCopy(tmp);
+    }
 
     clickTrigger() {
         this.gameState.boardPowered = !this.gameState.boardPowered;
@@ -399,7 +424,7 @@ export class GameLogic {
 
         do {
             this.#createBoard(difficulty, sizeX, sizeY);
-        } while(CircuitBoardVerifier.verify(this.circuitBoard, this.#powX, this.#powY));
+        } while (CircuitBoardVerifier.verify(this.circuitBoard, this.#powX, this.#powY));
     }
 
     #createBoard(difficulty, sizeX, sizeY) {
@@ -413,16 +438,16 @@ export class GameLogic {
                 this.#powY = Math.floor(Math.random() * sizeY);
                 break;
             case 1: // Right Edge
-            this.#powX = Math.floor(Math.random() * sizeX);
-            this.#powY = sizeY - 1;
+                this.#powX = Math.floor(Math.random() * sizeX);
+                this.#powY = sizeY - 1;
                 break;
             case 2: // Bottom Edge
-            this.#powX = sizeX - 1;
-            this.#powY = Math.floor(Math.random() * sizeY);
+                this.#powX = sizeX - 1;
+                this.#powY = Math.floor(Math.random() * sizeY);
                 break;
             case 3: // Left Edge
-            this.#powX = Math.floor(Math.random() * sizeX);
-            this.#powY = 0;
+                this.#powX = Math.floor(Math.random() * sizeX);
+                this.#powY = 0;
                 break;
         }
 
@@ -545,14 +570,14 @@ class CircuitBoardVerifier {
     static #checkBoardStateRec(circuitBoard, powX, powY, idx) {
         // verify current boardstate
         circuitBoard[powX][powY].clickTrigger();
-        if(circuitBoard.gameState.goalPowered && !circuitBoard.gameState.trapPowered) {
+        if (circuitBoard.gameState.goalPowered && !circuitBoard.gameState.trapPowered) {
             return true;
         }
         // turn power off again to make rotating possible
         circuitBoard[powX][powY].clickTrigger();
 
         // check if we are still inside the circuitboard
-        if(idx >= circuitBoard.gameState.sizeX * circuitBoard.gameState.sizeY) {
+        if (idx >= circuitBoard.gameState.sizeX * circuitBoard.gameState.sizeY) {
             return false;
         }
 
@@ -560,29 +585,32 @@ class CircuitBoardVerifier {
         const curY = Math.floor(idx / circuitBoard.gameState.sizeX);
         const curX = idx % circuitBoard.gameState.sizeY;
 
-        const rotations = 0;
-        switch(circuitBoard[curX][curY].OpenEdges.length) {
-            case 2:
-                if(circuitBoard[curX][curY].OpenEdges[0].idx === Directions.inverse(circuitBoard[curX][curY].OpenEdges[1]).idx) {
-                    rotations = 1;
+        // Skip tile if its not a RotatingTile
+        if (!(circuitBoard[curX][curY] instanceof RotatingTile)) {
+            const rotations = 0;
+            switch (circuitBoard[curX][curY].OpenEdges.length) {
+                case 2:
+                    if (circuitBoard[curX][curY].OpenEdges[0].idx === Directions.inverse(circuitBoard[curX][curY].OpenEdges[1]).idx) {
+                        rotations = 1;
+                        break;
+                    }
+                case 3:
+                    rotations = 3;
                     break;
-                }
-            case 3:
-                rotations = 3;
-                break;    
-        }
-
-        for (let i = 0; i < rotations; i++) {
-            circuitBoard[curX][curY].clickTrigger();
-            
-            if(this.#checkBoardStateRec(circuitBoard, powX, powY, idx+1)) {
-                return true;
             }
-        }
 
-        // rotate back to initial position on rotateable tiles
-        if(rotations > 0) {
-            circuitBoard[curX][curY].clickTrigger();
+            for (let i = 0; i < rotations; i++) {
+                circuitBoard[curX][curY].clickTrigger();
+
+                if (this.#checkBoardStateRec(circuitBoard, powX, powY, idx + 1)) {
+                    return true;
+                }
+            }
+
+            // rotate back to initial position on rotateable tiles
+            if (rotations > 0) {
+                circuitBoard[curX][curY].clickTrigger();
+            }
         }
 
         return false;
