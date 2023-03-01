@@ -342,40 +342,47 @@ export class GameLogic {
     gameState;
     gameOverTrigger;
 
+    #powX = -1;
+    #powY = -1;
+
     constructor(difficulty, sizeX, sizeY, gameOverTrigger) {
         this.gameState = new GameState(difficulty, sizeX, sizeY);
         this.gameOverTrigger = gameOverTrigger;
 
+        do {
+            this.#createBoard(difficulty, sizeX, sizeY);
+        } while(CircuitBoardVerifier.verify(this.circuitBoard, this.#powX, this.#powY));
+    }
+
+    #createBoard(difficulty, sizeX, sizeY) {
         // init game board
         this.circuitBoard = Array.from(Array(sizeX), () => new Array(sizeY));
 
-        var tempX = -1;
-        var tempY = -1;
         // generate goal & power tile
         switch (Math.floor(Math.random() * 4)) {
             case 0: // Top Edge
-                tempX = 0;
-                tempY = Math.floor(Math.random() * sizeY);
+                this.#powX = 0;
+                this.#powY = Math.floor(Math.random() * sizeY);
                 break;
             case 1: // Right Edge
-                tempX = Math.floor(Math.random() * sizeX);
-                tempY = sizeY - 1;
+            this.#powX = Math.floor(Math.random() * sizeX);
+            this.#powY = sizeY - 1;
                 break;
             case 2: // Bottom Edge
-                tempX = sizeX - 1;
-                tempY = Math.floor(Math.random() * sizeY);
+            this.#powX = sizeX - 1;
+            this.#powY = Math.floor(Math.random() * sizeY);
                 break;
             case 3: // Left Edge
-                tempX = Math.floor(Math.random() * sizeX);
-                tempY = 0;
+            this.#powX = Math.floor(Math.random() * sizeX);
+            this.#powY = 0;
                 break;
         }
 
-        var powerTile = new PowerTile(tempX, tempY, this.gameState);
+        var powerTile = new PowerTile(this.#powX, this.#powY, this.gameState);
         ///TODO: Change How goal is spawned in relation to power - also maybe spawn more than one goal (adapt gamestate victory checks)
-        var goalTile = new GoalTile(sizeX - tempX - 1, sizeY - tempY - 1, this.gameState);
+        var goalTile = new GoalTile(sizeX - this.#powX - 1, sizeY - this.#powY - 1, this.gameState);
 
-        this.circuitBoard[tempX][tempY] = powerTile;
+        this.circuitBoard[this.#powX][this.#powY] = powerTile;
         this.circuitBoard[goalTile.X][goalTile.Y] = goalTile;
 
         var maxFixedTiles = Math.round(sizeX * sizeY * GameLogic.difficultyValues[difficulty].fixedTilePercentage);
@@ -422,8 +429,6 @@ export class GameLogic {
             }
         }
 
-        // TODO: Sanity-check, if puzzle is even possible
-
         // Init trap tiles after links are made to make sanity checks easier
         var possibleTrapCoords = [];
         for (let i = 0; i < sizeX; i++) {
@@ -456,5 +461,67 @@ export class GameLogic {
 
     getTileAt(x, y) {
         return this.circuitBoard[x][y];
+    }
+}
+
+
+
+class CircuitBoardVerifier {
+    static verify(circuitBoard, powX, powY) {
+        // Create deep clone
+        var cc = JSON.parse(JSON.stringify(circuitBoard));
+        return CircuitBoardVerifier.#checkBoardStateRec(cc, powX, powY, 0);
+    }
+
+    static verifyCB(circuitBoard, powX, powY, callback) {
+        // Create deep clone
+        var cc = JSON.parse(JSON.stringify(circuitBoard));
+        callback(CircuitBoardVerifier.#checkBoardStateRec(cc, powX, powY, 0));
+    }
+
+    static #checkBoardStateRec(circuitBoard, powX, powY, idx) {
+        // verify current boardstate
+        circuitBoard[powX][powY].clickTrigger();
+        if(circuitBoard.gameState.goalPowered && !circuitBoard.gameState.trapPowered) {
+            return true;
+        }
+        // turn power off again to make rotating possible
+        circuitBoard[powX][powY].clickTrigger();
+
+        // check if we are still inside the circuitboard
+        if(idx >= circuitBoard.gameState.sizeX * circuitBoard.gameState.sizeY) {
+            return false;
+        }
+
+        // get coords of tile to rotate
+        const curY = Math.floor(idx / circuitBoard.gameState.sizeX);
+        const curX = idx % circuitBoard.gameState.sizeY;
+
+        const rotations = 0;
+        switch(circuitBoard[curX][curY].OpenEdges.length) {
+            case 2:
+                if(circuitBoard[curX][curY].OpenEdges[0].idx === Directions.inverse(circuitBoard[curX][curY].OpenEdges[1]).idx) {
+                    rotations = 1;
+                    break;
+                }
+            case 3:
+                rotations = 3;
+                break;    
+        }
+
+        for (let i = 0; i < rotations; i++) {
+            circuitBoard[curX][curY].clickTrigger();
+            
+            if(this.#checkBoardStateRec(circuitBoard, powX, powY, idx+1)) {
+                return true;
+            }
+        }
+
+        // rotate back to initial position on rotateable tiles
+        if(rotations > 0) {
+            circuitBoard[curX][curY].clickTrigger();
+        }
+
+        return false;
     }
 }
