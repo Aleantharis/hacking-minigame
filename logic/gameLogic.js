@@ -131,6 +131,27 @@ class Tile {
         return tmp;
     }
 
+    copy() {
+        const tmp = new this(this.X, this.Y, this.gameState);
+
+        this.OpenEdges.forEach(e => {
+            tmp.OpenEdges.push(e);
+        });
+
+        this.Neighbors.forEach((n, dir) => {
+            tmp.Neighbors.set(dir, n);
+        });
+
+        // reasssing neighbors
+        tmp.Neighbors.forEach((n, dir) => {
+            if (n !== null) {
+                n.Neighbors.set(Directions.inverse(dir), tmp);
+            }
+        });
+
+        return tmp;
+    }
+
     getNeighborCoordinates(direction) {
         switch (direction.name) {
             case "up":
@@ -502,7 +523,7 @@ class CircuitBoardVerifier {
 
         for (let i = 0; i < sizeX; i++) {
             for (let j = 0; j < sizeY; j++) {
-                boardCopy[i][j] = Tile.copy(circuitBoard[i][j]);
+                boardCopy[i][j] = circuitBoard[i][j].copy();
             }
         }
 
