@@ -20,10 +20,9 @@ var debugOutput = "";
 var canvas = document.getElementById("cvGame");
 var ctx = canvas.getContext("2d");
 var gameLoop;
-var difficulty = 0;
+var difficulty;
 var canvasMinSize = 0;
 const BOARDSCALE = 0.8;
-var boardScaleX = 1;
 var boardScaleY = 1;
 var tileSize;
 
@@ -348,3 +347,4 @@ document.onpointermove = handleMouseMove;
 document.getElementById("fMenu").onsubmit = startGameHandler;
 document.getElementById("inSize").oninput = boardSizeInputChangeHandler;
 renderBoardSizeLabel();
+difficultyChange();
