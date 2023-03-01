@@ -181,9 +181,9 @@ function drawSuccess() {
 
 	// HACK SUCCESSFUL
 	// (click here to hide overlay)
-	
+
 	if (isDialogRendered) {
-		drawDialog("HACK SUCCESSFUL", "(Click to hide overlay)", "darkgreen");
+		drawDialog("HACK SUCCESSFUL", "", "(Click to hide overlay)", "darkgreen");
 	}
 }
 
@@ -196,7 +196,7 @@ function drawFailure() {
 	// (click here to hide overlay)
 
 	if (isDialogRendered) {
-		drawDialog("TRAP TRIGGERED - HACK FAILED", "(Click to hide overlay)", "darkred");
+		drawDialog("HACK FAILED", "You triggered a trap", "(Click to hide overlay)", "darkred");
 	}
 }
 
@@ -204,10 +204,10 @@ function drawIntro() {
 	drawBackground();
 	drawTransparentOverlay();
 
-	drawDialog("HACKING MINIGAME", "Rotate the tiles by clicking them. Connect the two circles to succeed. Avoid red tiles.", "gold")
+	drawDialog("HACKING MINIGAME", "Rotate nodes by clicking them. Connect Power (green) to Goal (gold) to succeed.", "Click Power-Node to activate. Avoid red nodes.", "gold")
 }
 
-function drawDialog(firstLine, secondLine, fillStyle) {
+function drawDialog(firstLine, secondLine, thirdLine, fillStyle) {
 	const sc = (1 - BOARDSCALE) / 2;
 	const headlineScale = 0.5;
 
@@ -224,8 +224,17 @@ function drawDialog(firstLine, secondLine, fillStyle) {
 	ctx.font = Math.floor(canvasMinSize * BOARDSCALE * headlineScale) + "px Segoe UI";
 	ctx.fillText(firstLine, 0, 0, canvas.width * BOARDSCALE);
 
-	ctx.font = Math.floor(canvasMinSize * BOARDSCALE * 0.10) + "px Segoe UI";
-	ctx.fillText(secondLine, 0, canvas.height * BOARDSCALE * (headlineScale / 2), canvas.width * BOARDSCALE);
+	if (thirdLine !== "") {
+		ctx.font = Math.floor(canvasMinSize * BOARDSCALE * 0.10) + "px Segoe UI";
+		ctx.fillText(secondLine, 0, canvas.height * BOARDSCALE * (headlineScale / 2), canvas.width * BOARDSCALE);
+	}
+	else {
+		ctx.font = Math.floor(canvasMinSize * BOARDSCALE * 0.05) + "px Segoe UI";
+		ctx.fillText(secondLine, 0, canvas.height * BOARDSCALE * (headlineScale / 2), canvas.width * BOARDSCALE);
+		
+		ctx.font = Math.floor(canvasMinSize * BOARDSCALE * 0.05) + "px Segoe UI";
+		ctx.fillText(thirdLine, 0, canvas.height * BOARDSCALE * (headlineScale), canvas.width * BOARDSCALE);
+	}
 	ctx.restore();
 }
 
