@@ -126,6 +126,7 @@ function pointerUpHandler(event) {
 	// Prevent interaction if gameloop is not running
 	switch (gameState) {
 		case "Running":
+			handleMouseMove(event);
 			var relX = Math.floor(mouseX / tileSize);
 			var relY = Math.floor(mouseY / tileSize);
 
