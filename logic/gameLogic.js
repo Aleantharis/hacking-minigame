@@ -503,6 +503,8 @@ class CircuitBoardVerifier {
                 boardCopy[i][j] = Tile.copy(circuitBoard[i][j]);
             }
         }
+
+        return boardCopy;
     }
 
     static verify(circuitBoard, powX, powY) {
