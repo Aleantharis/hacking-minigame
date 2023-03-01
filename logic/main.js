@@ -224,7 +224,7 @@ function drawDialog(firstLine, secondLine, thirdLine, fillStyle) {
 	ctx.font = Math.floor(canvasMinSize * BOARDSCALE * headlineScale) + "px Segoe UI";
 	ctx.fillText(firstLine, 0, 0, canvas.width * BOARDSCALE);
 
-	if (thirdLine !== "") {
+	if (thirdLine === "") {
 		ctx.font = Math.floor(canvasMinSize * BOARDSCALE * 0.10) + "px Segoe UI";
 		ctx.fillText(secondLine, 0, canvas.height * BOARDSCALE * (headlineScale / 2), canvas.width * BOARDSCALE);
 	}
@@ -233,7 +233,7 @@ function drawDialog(firstLine, secondLine, thirdLine, fillStyle) {
 		ctx.fillText(secondLine, 0, canvas.height * BOARDSCALE * (headlineScale / 2), canvas.width * BOARDSCALE);
 		
 		ctx.font = Math.floor(canvasMinSize * BOARDSCALE * 0.05) + "px Segoe UI";
-		ctx.fillText(thirdLine, 0, canvas.height * BOARDSCALE * (headlineScale), canvas.width * BOARDSCALE);
+		ctx.fillText(thirdLine, 0, canvas.height * BOARDSCALE * (headlineScale * (2/3)), canvas.width * BOARDSCALE);
 	}
 	ctx.restore();
 }
