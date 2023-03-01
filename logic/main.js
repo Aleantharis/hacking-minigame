@@ -333,7 +333,7 @@ function startGame() {
 	// document.getElementById("cbDebug").disabled = false;
 	document.getElementById("fMenu").onsubmit = stopGameHandler;
 
-	logic = new GameLogic(difficulty, boardSizes[boardSizeIdx].X, boardSizes[boardSizeIdx].Y, function (win) { stopGame(win); });
+	logic = new GameLogic(difficulty, boardSizes[boardSizeIdx].X, boardSizes[boardSizeIdx].Y, function (win) { stopGame(win); }, DEBUG);
 
 	boardScaleY = boardSizes[boardSizeIdx].Y / boardSizes[boardSizeIdx].X;
 
