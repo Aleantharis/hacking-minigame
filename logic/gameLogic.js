@@ -138,16 +138,16 @@ class Tile {
 
         // dont assign neighbors, doesnt work until all tiles are updated, becaues of referencing issues
 
-        // this.Neighbors.forEach((n, dir) => {
-        //     tmp.Neighbors.set(dir, n);
-        // });
+        this.Neighbors.forEach((n, dir) => {
+            tmp.Neighbors.set(dir, n);
+        });
 
         // reasssing neighbors
-        // tmp.Neighbors.forEach((n, dir) => {
-        //     if (n !== null) {
-        //         n.Neighbors.set(Directions.inverse(dir), tmp);
-        //     }
-        // });
+        tmp.Neighbors.forEach((n, dir) => {
+            if (n !== null) {
+                n.Neighbors.set(Directions.inverse(dir), tmp);
+            }
+        });
 
         return tmp;
     }
@@ -427,6 +427,10 @@ export class GameLogic {
         do {
             this.#createBoard(difficulty, sizeX, sizeY);
         } while ((!DEBUG) && (!CircuitBoardVerifier.verify(this.circuitBoard, this.#powX, this.#powY)));
+
+        this.gameState.boardPowered = false;
+        this.gameState.goalPowered = false;
+        this.gameState.trapPowered = false;
     }
 
     #createBoard(difficulty, sizeX, sizeY) {
@@ -555,18 +559,18 @@ class CircuitBoardVerifier {
         }
 
         // Create tile links - has to be done seperately otherwise array would not be filled
-        for (let i = 0; i < sizeX; i++) {
-            for (let j = 0; j < sizeY; j++) {
-                for (let k = 0; k < 4; k++) {
-                    var dir = Directions.getByIndex(k);
-                    var n = boardCopy[i][j].getNeighborCoordinates(dir);
+        // for (let i = 0; i < sizeX; i++) {
+        //     for (let j = 0; j < sizeY; j++) {
+        //         for (let k = 0; k < 4; k++) {
+        //             var dir = Directions.getByIndex(k);
+        //             var n = boardCopy[i][j].getNeighborCoordinates(dir);
 
-                    if (n.X >= 0 && n.X < sizeX && n.Y >= 0 && n.Y < sizeY) {
-                        boardCopy[i][j].Neighbors.set(dir, boardCopy[n.X][n.Y]);
-                    }
-                }
-            }
-        }
+        //             if (n.X >= 0 && n.X < sizeX && n.Y >= 0 && n.Y < sizeY) {
+        //                 boardCopy[i][j].Neighbors.set(dir, boardCopy[n.X][n.Y]);
+        //             }
+        //         }
+        //     }
+        // }
 
         return boardCopy;
     }
