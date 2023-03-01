@@ -493,8 +493,8 @@ export class GameLogic {
 
 class CircuitBoardVerifier {
     static #cloneBoard(circuitBoard) {
-        var sizeX = circuitBoard.gameState.sizeX;
-        var sizeY = circuitBoard.gameState.sizeY;
+        var sizeX = circuitBoard[0][0].gameState.sizeX;
+        var sizeY = circuitBoard[0][0].gameState.sizeY;
 
         var boardCopy = Array.from(Array(sizeX), () => new Array(sizeY));
 
