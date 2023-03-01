@@ -435,6 +435,10 @@ export class GameLogic {
         // try a different approach, generating a path from power->goal first, then fill up rest of tiles (still not allowing traps near 4-edge tiles),
         // then spin all rotatingtiles 1-3 times randomly
 
+        // i do not understand why in the name of cthulhu, we still have references back to the original object.....
+        // like seriousyl i create new objects for everything, new arrays, etc.
+        // and still the original grid gets rotated around during verification
+
         this.gameState.boardPowered = false;
         this.gameState.goalPowered = false;
         this.gameState.trapPowered = false;
