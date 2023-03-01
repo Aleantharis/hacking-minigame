@@ -588,7 +588,7 @@ class CircuitBoardVerifier {
 
         // Skip tile if its not a RotatingTile
         if (!(circuitBoard[curX][curY] instanceof RotatingTile)) {
-            const rotations = 0;
+            var rotations = 0;
             switch (circuitBoard[curX][curY].OpenEdges.length) {
                 case 2:
                     if (circuitBoard[curX][curY].OpenEdges[0].idx === Directions.inverse(circuitBoard[curX][curY].OpenEdges[1]).idx) {
