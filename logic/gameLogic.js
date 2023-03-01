@@ -424,7 +424,7 @@ export class GameLogic {
 
         do {
             this.#createBoard(difficulty, sizeX, sizeY);
-        } while (CircuitBoardVerifier.verify(this.circuitBoard, this.#powX, this.#powY));
+        } while ((!DEBUG) || (!CircuitBoardVerifier.verify(this.circuitBoard, this.#powX, this.#powY)));
     }
 
     #createBoard(difficulty, sizeX, sizeY) {
