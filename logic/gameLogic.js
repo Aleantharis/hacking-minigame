@@ -152,7 +152,7 @@ class Tile {
 
     copy() {
         const tmp = new Tile(this.X, this.Y, this.gameState);
-        return deepCopy(tmp);
+        return this.deepCopy(tmp);
     }
 
     getNeighborCoordinates(direction) {
@@ -272,7 +272,7 @@ class RotatingTile extends Tile {
 
     copy() {
         const tmp = new RotatingTile(this.X, this.Y, this.gameState);
-        return deepCopy(tmp);
+        return this.deepCopy(tmp);
     }
 
     getPrintColor() {
@@ -288,7 +288,7 @@ class GoalTile extends Tile {
 
     copy() {
         const tmp = new GoalTile(this.X, this.Y, this.gameState);
-        return deepCopy(tmp);
+        return this.deepCopy(tmp);
     }
 
     power(incomingFrom) {
@@ -327,7 +327,7 @@ class TrapTile extends Tile {
 
     copy() {
         const tmp = new TrapTile(this);
-        return deepCopy(tmp);
+        return this.deepCopy(tmp);
     }
 
     power(incomingFrom) {
@@ -352,7 +352,7 @@ class PowerTile extends Tile {
 
     copy() {
         const tmp = new PowerTile(this.X, this.Y, this.gameState);
-        return deepCopy(tmp);
+        return this.deepCopy(tmp);
     }
 
     clickTrigger() {
