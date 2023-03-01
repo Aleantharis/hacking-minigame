@@ -190,9 +190,9 @@ function drawDialog(firstLine, secondLine, thirdLine, fillStyle) {
 	else {
 		ctx.font = Math.floor(canvasMinSize * BOARDSCALE * 0.05) + "px Segoe UI";
 		ctx.fillText(secondLine, 0, canvas.height * BOARDSCALE * (headlineScale / 2), canvas.width * BOARDSCALE);
-		
+
 		ctx.font = Math.floor(canvasMinSize * BOARDSCALE * 0.05) + "px Segoe UI";
-		ctx.fillText(thirdLine, 0, canvas.height * BOARDSCALE * (headlineScale * (2/3)), canvas.width * BOARDSCALE);
+		ctx.fillText(thirdLine, 0, canvas.height * BOARDSCALE * (headlineScale * (2 / 3)), canvas.width * BOARDSCALE);
 	}
 	ctx.restore();
 }
@@ -239,7 +239,7 @@ function draw() {
 			ctx.fillRect(i * tileSize, j * tileSize, tileSize, tileSize);
 
 			ctx.fillStyle = logic.getTileAt(i, j).getPrintColor() ?? `rgb(${255 - rgbVal}, ${255 - rgbVal}, ${255 - rgbVal})`;
-			ctx.font = Math.floor(tileSize * 0.9) + "px Segoe UI";
+			ctx.font = `${Math.floor(tileSize * 0.9)}px font-family:"Droid Sans Mono",Consolas,"Courier New","Liberation Mono",monospace;`;
 			ctx.textBaseline = "top";
 			ctx.fillText(logic.getTileAt(i, j).getStringRepresentation(), (i + 0.05) * tileSize, (j + 0.05) * tileSize, tileSize * 0.9);
 		}
