@@ -568,22 +568,23 @@ class CircuitBoardVerifier {
     }
 
     static #checkBoardStateRec(circuitBoard, powX, powY, idx) {
+
         // verify current boardstate
         circuitBoard[powX][powY].clickTrigger();
-        if (circuitBoard.gameState.goalPowered && !circuitBoard.gameState.trapPowered) {
+        if (circuitBoard[powX][powY].gameState.goalPowered && !circuitBoard[powX][powY].gameState.trapPowered) {
             return true;
         }
         // turn power off again to make rotating possible
         circuitBoard[powX][powY].clickTrigger();
 
         // check if we are still inside the circuitboard
-        if (idx >= circuitBoard.gameState.sizeX * circuitBoard.gameState.sizeY) {
+        if (idx >= circuitBoard[powX][powY].gameState.sizeX * circuitBoard[powX][powY].gameState.sizeY) {
             return false;
         }
 
         // get coords of tile to rotate
-        const curY = Math.floor(idx / circuitBoard.gameState.sizeX);
-        const curX = idx % circuitBoard.gameState.sizeY;
+        const curY = Math.floor(idx / circuitBoard[powX][powY].gameState.sizeX);
+        const curX = idx % circuitBoard[powX][powY].gameState.sizeY;
 
         // Skip tile if its not a RotatingTile
         if (!(circuitBoard[curX][curY] instanceof RotatingTile)) {
