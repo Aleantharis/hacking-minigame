@@ -423,9 +423,17 @@ export class GameLogic {
         this.gameOverTrigger = gameOverTrigger;
         this.gameState.DEBUG = DEBUG;
 
-        do {
-            this.#createBoard(difficulty, sizeX, sizeY);
-        } while ((!DEBUG) && (!CircuitBoardVerifier.verify(this.circuitBoard, this.#powX, this.#powY)));
+        this.#createBoard(difficulty, sizeX, sizeY);
+
+        if(!DEBUG) {
+            while ((!CircuitBoardVerifier.verify(this.circuitBoard, this.#powX, this.#powY))) {
+                this.#createBoard(difficulty, sizeX, sizeY);
+            }
+        }
+
+        // since this copy shit obviously doesnt want o fucking work, 
+        // try a different approach, generating a path from power->goal first, then fill up rest of tiles (still not allowing traps near 4-edge tiles),
+        // then spin all rotatingtiles 1-3 times randomly
 
         this.gameState.boardPowered = false;
         this.gameState.goalPowered = false;
