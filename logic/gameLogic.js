@@ -110,6 +110,25 @@ class Tile {
         this.Neighbors.set(Directions.Left, null);
     }
 
+    static copy(tile) {
+        const tmp = new this(tile.X, tile.Y, tile.gameState);
+
+        tile.OpenEdges.forEach(e => {
+            tmp.OpenEdges.push(e);
+        });
+
+        tile.Neighbors.forEach((n, dir) => {
+            tmp.Neighbors.set(dir, n);
+        });
+
+        // reasssing neighbors
+        tmp.Neighbors.forEach((n, dir) => {
+            if (n !== null) {
+                n.Neighbors.set(Directions.inverse(dir), tmp);
+            }
+        });
+    }
+
     getNeighborCoordinates(direction) {
         switch (direction.name) {
             case "up":
@@ -324,10 +343,15 @@ class GameState {
     trapPowered = false;
     DEBUG = false;
 
-    constructor(difficulty, sizeX, sizeY) {
+    constructor(difficulty, sizeX, sizeY, DEBUG) {
         this.difficulty = difficulty;
         this.sizeX = sizeX;
         this.sizeY = sizeY;
+        this.DEBUG = DEBUG;
+    }
+
+    static copy(gameState) {
+        return new this(gameState.difficulty, gameState.sizeX, gameState.sizeY, gameState.DEBUG);
     }
 }
 
@@ -345,9 +369,10 @@ export class GameLogic {
     #powX = -1;
     #powY = -1;
 
-    constructor(difficulty, sizeX, sizeY, gameOverTrigger) {
+    constructor(difficulty, sizeX, sizeY, gameOverTrigger, DEBUG) {
         this.gameState = new GameState(difficulty, sizeX, sizeY);
         this.gameOverTrigger = gameOverTrigger;
+        this.gameState.DEBUG = DEBUG;
 
         do {
             this.#createBoard(difficulty, sizeX, sizeY);
@@ -467,15 +492,28 @@ export class GameLogic {
 
 
 class CircuitBoardVerifier {
+    static #cloneBoard(circuitBoard) {
+        var sizeX = circuitBoard.gameState.sizeX;
+        var sizeY = circuitBoard.gameState.sizeY;
+
+        var boardCopy = Array.from(Array(sizeX), () => new Array(sizeY));
+
+        for (let i = 0; i < sizeX; i++) {
+            for (let j = 0; j < sizeY; j++) {
+                boardCopy[i][j] = Tile.copy(circuitBoard[i][j]);
+            }
+        }
+    }
+
     static verify(circuitBoard, powX, powY) {
         // Create deep clone
-        var cc = JSON.parse(JSON.stringify(circuitBoard));
+        var cc = CircuitBoardVerifier.#cloneBoard(circuitBoard);
         return CircuitBoardVerifier.#checkBoardStateRec(cc, powX, powY, 0);
     }
 
     static verifyCB(circuitBoard, powX, powY, callback) {
         // Create deep clone
-        var cc = JSON.parse(JSON.stringify(circuitBoard));
+        var cc = CircuitBoardVerifier.#cloneBoard(circuitBoard);
         callback(CircuitBoardVerifier.#checkBoardStateRec(cc, powX, powY, 0));
     }
 
