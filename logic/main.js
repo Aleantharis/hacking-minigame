@@ -301,7 +301,7 @@ function stopGame(win) {
 	document.getElementById("sDiff").disabled = false;
 	document.getElementById("inSize").disabled = false;
 	document.getElementById("btnStart").value = "Start";
-	document.getElementById("cbDebug").disabled = true;
+	// document.getElementById("cbDebug").disabled = true;
 	document.getElementById("fMenu").onsubmit = startGameHandler;
 
 	// Trigger resize to draw canvas
@@ -330,7 +330,7 @@ function startGame() {
 	document.getElementById("inSize").disabled = true;
 	renderBoardSizeLabel();
 	document.getElementById("btnStart").value = "Stop";
-	document.getElementById("cbDebug").disabled = false;
+	// document.getElementById("cbDebug").disabled = false;
 	document.getElementById("fMenu").onsubmit = stopGameHandler;
 
 	logic = new GameLogic(difficulty, boardSizes[boardSizeIdx].X, boardSizes[boardSizeIdx].Y, function (win) { stopGame(win); });
