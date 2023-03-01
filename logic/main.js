@@ -183,7 +183,7 @@ function drawSuccess() {
 	// (click here to hide overlay)
 
 	if (isDialogRendered) {
-		drawDialog("HACK SUCCESSFUL", "", "(Click to hide overlay)", "darkgreen");
+		drawDialog("HACK COMPLETED", "", "(Click to hide overlay)", "darkgreen");
 	}
 }
 
