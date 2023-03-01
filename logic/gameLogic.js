@@ -127,6 +127,8 @@ class Tile {
                 n.Neighbors.set(Directions.inverse(dir), tmp);
             }
         });
+
+        return tmp;
     }
 
     getNeighborCoordinates(direction) {
