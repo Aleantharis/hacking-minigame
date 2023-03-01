@@ -82,13 +82,6 @@ window.addEventListener("orientationchange", resizeCanvas);
 function debugToggle() {
 	DEBUG = document.getElementById("cbDebug").checked;
 	logic.gameState.DEBUG = DEBUG;
-
-	// if (DEBUG) {
-	// 	document.getElementById("testOut").classList.remove("hidden");
-	// }
-	// else {
-	// 	document.getElementById("testOut").classList.add("hidden");
-	// }
 }
 document.getElementById("cbDebug").addEventListener("change", debugToggle);
 
@@ -96,31 +89,6 @@ function difficultyChange() {
 	difficulty = document.getElementById("sDiff").value;
 }
 document.getElementById("sDiff").addEventListener("change", difficultyChange);
-
-function keyDownHandler(event) {
-	if (event.key === "Right" || event.key === "ArrowRight" || event.key === "D" || event.key === "d") {
-		rightPressed = true;
-	}
-}
-
-function keyUpHandler(event) {
-	if (event.key === "Right" || event.key === "ArrowRight" || event.key === "D" || event.key === "d") {
-		rightPressed = false;
-	}
-}
-document.addEventListener("keydown", keyDownHandler, false);
-document.addEventListener("keyup", keyUpHandler, false);
-
-var touchPoints = [];
-function pointerDownHandler(event) {
-	if (event.pointerType === "mouse") {
-		// handle mouseclick
-	}
-	else if (event.pointerType === "touch") {
-		touchPoints.push(event.pointerId);
-		// handle touch down
-	}
-}
 
 function pointerUpHandler(event) {
 	// Prevent interaction if gameloop is not running
@@ -147,17 +115,7 @@ function pointerUpHandler(event) {
 		default:
 			return;
 	}
-
-	// if (event.pointerType === "touch") {
-	// 	var index = touchPoints.indexOf(event.pointerId);
-
-	// 	// handle touch up
-	// }
-	// else {
-	// 	// handle mouse up
-	// }
 }
-canvas.addEventListener("pointerdown", pointerDownHandler, false);
 canvas.addEventListener("pointerup", pointerUpHandler, false);
 canvas.addEventListener("pointercancel", pointerUpHandler, false);
 
@@ -344,7 +302,6 @@ function stopGame(win) {
 	document.getElementById("btnStart").value = "Start";
 	document.getElementById("cbDebug").disabled = true;
 	document.getElementById("fMenu").onsubmit = startGameHandler;
-	// canvas.classList.remove("noCrsr");
 
 	// clear out touchpoints 
 	if (touchPoints.length > 0) {
@@ -379,7 +336,6 @@ function startGame() {
 	document.getElementById("btnStart").value = "Stop";
 	document.getElementById("cbDebug").disabled = false;
 	document.getElementById("fMenu").onsubmit = stopGameHandler;
-	// canvas.classList.add("noCrsr");
 
 	logic = new GameLogic(difficulty, boardSizes[boardSizeIdx].X, boardSizes[boardSizeIdx].Y, function (win) { stopGame(win); });
 
