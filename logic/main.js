@@ -39,8 +39,10 @@ var boardSizeIdx = 0;
 const boardSizes = [
 	{ X: 4, Y: 4 },
 	{ X: 8, Y: 4 },
+	{ X: 8, Y: 6 },
 	{ X: 8, Y: 8 },
 	{ X: 12, Y: 8 },
+	{ X: 12, Y: 10 }, 
 	{ X: 12, Y: 12 }
 ];
 
