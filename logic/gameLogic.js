@@ -608,7 +608,7 @@ class CircuitBoardVerifier {
         // verify current boardstate
         circuitBoard[powX][powY].clickTrigger();
         if (circuitBoard[powX][powY].gameState.goalPowered && !circuitBoard[powX][powY].gameState.trapPowered) {
-            return true;
+            return idx > 0; // instantly fail if generated puzzle is already solved
         }
         // turn power off again to make rotating possible
         circuitBoard[powX][powY].clickTrigger();
