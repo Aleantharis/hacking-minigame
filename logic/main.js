@@ -26,7 +26,7 @@ const BOARDSCALE = 0.8;
 var boardScaleY = 1;
 var tileSize;
 
-// "Loading", "Intro", "Running", "Success", "Failure"
+// "Loading", "Intro", "Running", "Success", "Failure", "Generating"
 var gameState = "Loading";
 var isDialogRendered = true;
 
@@ -34,6 +34,7 @@ var mouseX = 0;
 var mouseY = 0;
 
 var logic;
+var verificationWorker;
 
 var boardSizeIdx = 0;
 const boardSizes = [
@@ -42,7 +43,7 @@ const boardSizes = [
 	{ X: 8, Y: 6 },
 	{ X: 8, Y: 8 },
 	{ X: 12, Y: 8 },
-	{ X: 12, Y: 10 }, 
+	{ X: 12, Y: 10 },
 	{ X: 12, Y: 12 }
 ];
 
@@ -73,6 +74,9 @@ function resizeCanvas() {
 			break;
 		case "Failure":
 			drawFailure();
+			break;
+		case "Generating":
+			drawGenerating();
 			break;
 	}
 }
@@ -158,6 +162,13 @@ function drawFailure() {
 	if (isDialogRendered) {
 		drawDialog("HACK FAILED", "You triggered a trap", "(Click to hide overlay)", "darkred");
 	}
+}
+
+function drawGenerating() {
+	draw();
+	drawTransparentOverlay();
+
+	drawDialog("Initializing BREACH Protocol", "", "Please wait...", "goldenrod");
 }
 
 function drawIntro() {
@@ -281,13 +292,45 @@ function handleMouseMove(event) {
 function stopGameHandler(event) {
 	event.preventDefault();
 
+	if (verificationWorker) {
+		verificationWorker.terminate();
+	}
+
 	gameState = "Intro";
 	stopGame(false);
 }
 
 function startGameHandler(event) {
 	event.preventDefault();
-	startGame();
+
+	verificationWorker = new Worker("./verifyWorker.js");
+	verificationWorker.onmessage = verificationMessageHandler;
+
+	// wait for worker to complete instead of directly starting game
+	//startGame();
+
+	gameState = "Generating";
+
+	initNewBoard();
+}
+
+function initNewBoard() {
+	logic = new GameLogic(difficulty, boardSizes[boardSizeIdx].X, boardSizes[boardSizeIdx].Y, function (win) { stopGame(win); }, DEBUG);
+
+	verificationWorker.postMessage(logic);
+}
+
+function verificationMessageHandler(event) {
+	if (DEBUG) {
+		console.log("Board verification complete: " + event.data);
+	}
+
+	if (event.data === true) {
+		startGame();
+	}
+	else {
+		initNewBoard();
+	}
 }
 
 function stopGame(win) {
@@ -321,8 +364,6 @@ function renderBoardSizeLabel() {
 function startGame() {
 	console.log("difficulty: " + difficulty);
 
-	boardSizeIdx = document.getElementById("inSize").value;
-
 	gameLoop = setInterval(draw, 10);
 	gameState = "Running";
 
@@ -332,8 +373,6 @@ function startGame() {
 	document.getElementById("btnStart").value = "Stop";
 	// document.getElementById("cbDebug").disabled = false;
 	document.getElementById("fMenu").onsubmit = stopGameHandler;
-
-	logic = new GameLogic(difficulty, boardSizes[boardSizeIdx].X, boardSizes[boardSizeIdx].Y, function (win) { stopGame(win); }, DEBUG);
 
 	boardScaleY = boardSizes[boardSizeIdx].Y / boardSizes[boardSizeIdx].X;
 
