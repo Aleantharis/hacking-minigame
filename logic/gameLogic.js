@@ -623,7 +623,7 @@ class CircuitBoardVerifier {
         const curX = idx % circuitBoard[powX][powY].gameState.sizeY;
 
         // Skip tile if its not a RotatingTile
-        if (!(circuitBoard[curX][curY] instanceof RotatingTile)) {
+        if (circuitBoard[curX][curY] instanceof RotatingTile) {
             var rotations = 0;
             switch (circuitBoard[curX][curY].OpenEdges.length) {
                 case 2:
