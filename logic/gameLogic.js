@@ -159,17 +159,24 @@ export class GameLogic {
     }
 
     serialize() {
-        var board = Array.from(Array(boardSizes[boardSizeIdx].X), () => new Array(boardSizes[boardSizeIdx].Y));
+        var board = Array.from(Array(this.gameState.sizeX), () => new Array(this.gameState.sizeY));
 
-        for (let i = 0; i < boardSizes[boardSizeIdx].X; i++) {
-            for (let j = 0; j < boardSizes[boardSizeIdx].Y; j++) {
-                board[i][j] = TileSerializer.serialize(logic.getTileAt(i, j));
+        for (let i = 0; i < this.gameState.sizeX; i++) {
+            for (let j = 0; j < this.gameState.sizeY; j++) {
+                board[i][j] = TileSerializer.serialize(this.circuitBoard[i][j]);
             }
         }
 
         return {
             tiles: board,
-            gState: this.gameState
+            gState: {
+                difficulty: this.gameState.difficulty,
+                sizeX: this.gameState.sizeX,
+                sizeY: this.gameState.sizeY,
+                powX: this.gameState.powX,
+                powY: this.gameState.powY,
+                debug: this.gameState.DEBUG
+            }
         };
     }
 }
