@@ -1,4 +1,4 @@
-self.importScripts("./tiles.js");
+import { Directions, Tile, RotatingTile, GoalTile, TrapTile, PowerTile, DifficultySettings, GameState } from "./tiles.js"
 
 self.onmessage = (e) => {
     CircuitBoardVerifier.verifyCB(e.data, (result) => {
