@@ -321,22 +321,39 @@ export class GoalTile extends Tile {
 export class TrapTile extends Tile {
     OpenEdges = [Directions.Up, Directions.Right, Directions.Down, Directions.Left];
 
-    constructor(tile) {
-        super(tile.X, tile.Y, tile.gameState);
+    // constructor(tile) {
+    //     super(tile.X, tile.Y, tile.gameState);
+
+    //     if (!(tile instanceof TrapTile)) {
+    //         this.Neighbors = tile.Neighbors;
+
+    //         this.Neighbors.forEach((n, dir) => {
+    //             if (n !== null) {
+    //                 n.Neighbors.set(Directions.inverse(dir), this);
+    //             }
+    //         });
+    //     }
+    // }
+
+    static fromTile(tile) {
+        var ret = new TrapTile(tile.X, tile.Y, tile.gameState);
 
         if (!(tile instanceof TrapTile)) {
-            this.Neighbors = tile.Neighbors;
+            ret.Neighbors = tile.Neighbors;
 
-            this.Neighbors.forEach((n, dir) => {
+            ret.Neighbors.forEach((n, dir) => {
                 if (n !== null) {
-                    n.Neighbors.set(Directions.inverse(dir), this);
+                    n.Neighbors.set(Directions.inverse(dir), ret);
                 }
             });
         }
+
+        return ret;
     }
 
     copy() {
-        const tmp = new TrapTile(this);
+        //const tmp = new TrapTile(this);
+        const tmp = new TrapTile(this.X, this.Y, this.gameState);
         this.deepCopy(tmp);
         return tmp;
     }
