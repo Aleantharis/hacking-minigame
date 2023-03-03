@@ -1,4 +1,4 @@
-self.importScripts("/tiles.js");
+self.importScripts("./logic/tiles.js");
 
 self.onmessage = (e) => {
     CircuitBoardVerifier.verifyCB(e.data, (result) => {
