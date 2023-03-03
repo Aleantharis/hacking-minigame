@@ -86,7 +86,7 @@ window.addEventListener("orientationchange", resizeCanvas);
 
 function debugToggle() {
 	DEBUG = document.getElementById("cbDebug").checked;
-	
+
 	if(logic && logic.gameState) {
 		logic.gameState.DEBUG = DEBUG;
 	}
@@ -313,7 +313,7 @@ function startGameHandler(event) {
 	// document.getElementById("cbDebug").disabled = false;
 	document.getElementById("fMenu").onsubmit = stopGameHandler;
 
-	if(!DEUBG) {
+	if(!DEBUG) {
 		if(verificationWorker) {
 			verificationWorker.terminate();
 		}
