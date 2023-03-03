@@ -303,7 +303,7 @@ function stopGameHandler(event) {
 function startGameHandler(event) {
 	event.preventDefault();
 
-	verificationWorker = new Worker("./verifyWorker.js");
+	verificationWorker = new Worker("./logic/verifyWorker.js");
 	verificationWorker.onmessage = verificationMessageHandler;
 
 	// wait for worker to complete instead of directly starting game
