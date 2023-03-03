@@ -303,6 +303,12 @@ function stopGameHandler(event) {
 function startGameHandler(event) {
 	event.preventDefault();
 
+	document.getElementById("sDiff").disabled = true;
+	document.getElementById("inSize").disabled = true;
+	document.getElementById("btnStart").value = "Stop";
+	// document.getElementById("cbDebug").disabled = false;
+	document.getElementById("fMenu").onsubmit = stopGameHandler;
+
 	verificationWorker = new Worker("./logic/verifyWorker.js", { type: "module" });
 	verificationWorker.onmessage = verificationMessageHandler;
 
@@ -310,6 +316,7 @@ function startGameHandler(event) {
 	//startGame();
 
 	gameState = "Generating";
+	resizeCanvas();
 
 	initNewBoard();
 }
@@ -366,13 +373,6 @@ function startGame() {
 
 	gameLoop = setInterval(draw, 10);
 	gameState = "Running";
-
-	document.getElementById("sDiff").disabled = true;
-	document.getElementById("inSize").disabled = true;
-	renderBoardSizeLabel();
-	document.getElementById("btnStart").value = "Stop";
-	// document.getElementById("cbDebug").disabled = false;
-	document.getElementById("fMenu").onsubmit = stopGameHandler;
 
 	boardScaleY = boardSizes[boardSizeIdx].Y / boardSizes[boardSizeIdx].X;
 
