@@ -294,6 +294,7 @@ function stopGameHandler(event) {
 
 	if (verificationWorker) {
 		verificationWorker.terminate();
+		verificationWorker = undefined;
 	}
 
 	gameState = "Intro";
@@ -309,11 +310,13 @@ function startGameHandler(event) {
 	// document.getElementById("cbDebug").disabled = false;
 	document.getElementById("fMenu").onsubmit = stopGameHandler;
 
-	verificationWorker = new Worker("./logic/verifyWorker.js", { type: "module" });
-	verificationWorker.onmessage = verificationMessageHandler;
-
-	// wait for worker to complete instead of directly starting game
-	//startGame();
+	if(!DEUBG) {
+		if(verificationWorker) {
+			verificationWorker.terminate();
+		}
+		verificationWorker = new Worker("./logic/verifyWorker.js", { type: "module" });
+		verificationWorker.onmessage = verificationMessageHandler;
+	}
 
 	gameState = "Generating";
 	resizeCanvas();
@@ -324,7 +327,9 @@ function startGameHandler(event) {
 function initNewBoard() {
 	logic = new GameLogic(difficulty, boardSizes[boardSizeIdx].X, boardSizes[boardSizeIdx].Y, function (win) { stopGame(win); }, DEBUG);
 
-	verificationWorker.postMessage(logic.serialize());
+	if(verificationWorker) {
+		verificationWorker.postMessage(logic.serialize());
+	}
 }
 
 function verificationMessageHandler(event) {
