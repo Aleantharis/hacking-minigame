@@ -86,7 +86,10 @@ window.addEventListener("orientationchange", resizeCanvas);
 
 function debugToggle() {
 	DEBUG = document.getElementById("cbDebug").checked;
-	logic.gameState.DEBUG = DEBUG;
+	
+	if(logic && logic.gameState) {
+		logic.gameState.DEBUG = DEBUG;
+	}
 }
 document.getElementById("cbDebug").addEventListener("change", debugToggle);
 
