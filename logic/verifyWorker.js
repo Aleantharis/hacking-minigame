@@ -1,7 +1,30 @@
-import { Directions, Tile, RotatingTile, GoalTile, TrapTile, PowerTile, DifficultySettings, GameState } from "./tiles.js"
+import { Directions, Tile, RotatingTile, GoalTile, TrapTile, PowerTile, DifficultySettings, GameState, TileSerializer } from "./tiles.js"
 
 self.onmessage = (e) => {
-    CircuitBoardVerifier.verifyCB(e.data, (result) => {
+    var gState = new GameState(e.data.gState.difficulty, e.data.gState.sizeX, e.data.gState.sizeY, e.data.gState.powX, e.data.gState.powY, e.data.gState.debug);
+    
+    // deserialize board
+    var board = Array.from(Array(sizeX), () => new Array(sizeY));
+    for (let i = 0; i < gState.sizeX; i++) {
+        for (let j = 0; j < gState.sizeY; j++) {
+            board[i][j] = TileSerializer.deserialize(e.data.tiles[i][j], gState);
+        }
+    }
+
+    for (let i = 0; i < sizeX; i++) {
+        for (let j = 0; j < sizeY; j++) {
+            for (let k = 0; k < 4; k++) {
+                var dir = Directions.getByIndex(k);
+                var n = board[i][j].getNeighborCoordinates(dir);
+
+                if (n.X >= 0 && n.X < sizeX && n.Y >= 0 && n.Y < sizeY) {
+                    board[i][j].Neighbors.set(dir, board[n.X][n.Y]);
+                }
+            }
+        }
+    }
+
+    CircuitBoardVerifier.verifyCB_NC(board, (result) => {
         self.postMessage(result);
     });
 }
@@ -48,6 +71,11 @@ class CircuitBoardVerifier {
         // Create deep clone
         var cc = CircuitBoardVerifier.#cloneBoard(circuitBoard);
         callback(CircuitBoardVerifier.#checkBoardStateRec(cc, circuitBoard[0][0].gameState.powX, circuitBoard[0][0].gameState.powY, 0));
+    }
+
+    static verifyCB_NC(circuitBoard, callback) {
+        // NO cloning
+        callback(CircuitBoardVerifier.#checkBoardStateRec(circuitBoard, circuitBoard[0][0].gameState.powX, circuitBoard[0][0].gameState.powY, 0));
     }
 
     static #checkBoardStateRec(circuitBoard, powX, powY, idx) {

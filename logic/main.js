@@ -317,7 +317,7 @@ function startGameHandler(event) {
 function initNewBoard() {
 	logic = new GameLogic(difficulty, boardSizes[boardSizeIdx].X, boardSizes[boardSizeIdx].Y, function (win) { stopGame(win); }, DEBUG);
 
-	verificationWorker.postMessage(logic);
+	verificationWorker.postMessage(logic.serialize());
 }
 
 function verificationMessageHandler(event) {

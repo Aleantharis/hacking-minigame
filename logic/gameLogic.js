@@ -5,7 +5,7 @@
 // https://stackoverflow.com/questions/950087/how-do-i-include-a-javascript-file-in-another-javascript-file
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import
 
-import { Directions, Tile, RotatingTile, GoalTile, TrapTile, PowerTile, DifficultySettings, GameState } from "./tiles.js"
+import { Directions, Tile, RotatingTile, GoalTile, TrapTile, PowerTile, DifficultySettings, GameState, TileSerializer } from "./tiles.js"
 
 export class GameLogic {
     static difficultyValues = {
@@ -156,6 +156,21 @@ export class GameLogic {
 
     getTileAt(x, y) {
         return this.circuitBoard[x][y];
+    }
+
+    serialize() {
+        var board = Array.from(Array(boardSizes[boardSizeIdx].X), () => new Array(boardSizes[boardSizeIdx].Y));
+
+        for (let i = 0; i < boardSizes[boardSizeIdx].X; i++) {
+            for (let j = 0; j < boardSizes[boardSizeIdx].Y; j++) {
+                board[i][j] = TileSerializer.serialize(logic.getTileAt(i, j));
+            }
+        }
+
+        return {
+            tiles: board,
+            gState: this.gameState
+        };
     }
 }
 

@@ -254,6 +254,10 @@ export class Tile {
         }
         return undefined;
     }
+
+    getCharacter() {
+        return "D";
+    }
 }
 
 export class RotatingTile extends Tile {
@@ -277,6 +281,10 @@ export class RotatingTile extends Tile {
             return "cyan";
         }
         return "powderblue";
+    }
+
+    getCharacter() {
+        return "R";
     }
 }
 
@@ -303,6 +311,10 @@ export class GoalTile extends Tile {
             return "gold";
         }
         return "goldenrod";
+    }
+
+    getCharacter() {
+        return "G";
     }
 }
 
@@ -344,6 +356,10 @@ export class TrapTile extends Tile {
         }
         return "darkred";
     }
+
+    getCharacter() {
+        return "T";
+    }
 }
 
 export class PowerTile extends Tile {
@@ -369,6 +385,10 @@ export class PowerTile extends Tile {
             return "green";
         }
         return "darkgreen";
+    }
+
+    getCharacter() {
+        return "P";
     }
 }
 
@@ -404,5 +424,65 @@ export class GameState {
 
     static copy(gameState) {
         return new this(gameState.difficulty, gameState.sizeX, gameState.sizeY, gameState.powX, gameState.powY, gameState.DEBUG);
+    }
+}
+
+export class TileSerializer {
+    static serialize(tile) {
+        var edges = [];
+
+        tile.OpenEdges.forEach(e => {
+            edges.push(e.idx);
+        });
+        
+        return {
+            Type: tile.getCharacter(),
+            X: tile.X,
+            Y: tile.Y,
+            OpenEdges: edges,
+            gState: {
+                difficulty: tile.gameState.difficulty,
+                sizeX: tile.gameState.sizeX,
+                sizeY: tile.gameState.sizeY,
+                powX: tile.gameState.powX,
+                powY: tile.gameState.powY,
+                debug: tile.gameState.DEBUG
+            }
+        };
+    }
+
+    static deserialize(tile, gState) {
+        //var gState = new GameState(tile.gState.difficulty, tile.gState.sizeX, tile.gState.sizeY, tile.gState.powX, tile.gState.powY, tile.gState.debug);
+        var ret;
+
+        switch(tile.Type) {
+            case "D":
+                ret = new Tile(tile.X, tile.Y, gState);
+                var e = [];
+
+                tile.OpenEdges.forEach(te => {
+                    e.push(Directions.getByIndex(te));
+                });
+
+                ret.OpenEdges = e;
+            case "P":
+                ret = new PowerTile(tile.X, tile.Y, gState);
+            case "G": 
+                ret = new GoalTile(tile.X, tile.Y, gState);
+            case "T":
+                ret = new TrapTile(tile.X, tile.Y, gState);
+            case "R":
+                ret = new RotatingTile(tile.X, tile.Y, gState);
+                var e = [];
+
+                tile.OpenEdges.forEach(te => {
+                    e.push(Directions.getByIndex(te));
+                });
+
+                ret.OpenEdges = e;
+
+        }
+
+        return ret;
     }
 }
