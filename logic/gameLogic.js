@@ -5,7 +5,7 @@
 // https://stackoverflow.com/questions/950087/how-do-i-include-a-javascript-file-in-another-javascript-file
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import
 
-import { Directions, Tile, RotatingTile, GoalTile, TrapTile, PowerTile, DifficultySettings, GameState } from "/tiles.js"
+import { Directions, Tile, RotatingTile, GoalTile, TrapTile, PowerTile, DifficultySettings, GameState } from "./tiles.js"
 
 export class GameLogic {
     static difficultyValues = {
