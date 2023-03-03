@@ -2,22 +2,22 @@ import { Directions, Tile, RotatingTile, GoalTile, TrapTile, PowerTile, Difficul
 
 self.onmessage = (e) => {
     var gState = new GameState(e.data.gState.difficulty, e.data.gState.sizeX, e.data.gState.sizeY, e.data.gState.powX, e.data.gState.powY, e.data.gState.debug);
-    
+
     // deserialize board
-    var board = Array.from(Array(sizeX), () => new Array(sizeY));
+    var board = Array.from(Array(gState.sizeX), () => new Array(gState.sizeY));
     for (let i = 0; i < gState.sizeX; i++) {
         for (let j = 0; j < gState.sizeY; j++) {
             board[i][j] = TileSerializer.deserialize(e.data.tiles[i][j], gState);
         }
     }
 
-    for (let i = 0; i < sizeX; i++) {
-        for (let j = 0; j < sizeY; j++) {
+    for (let i = 0; i < gState.sizeX; i++) {
+        for (let j = 0; j < gState.sizeY; j++) {
             for (let k = 0; k < 4; k++) {
                 var dir = Directions.getByIndex(k);
                 var n = board[i][j].getNeighborCoordinates(dir);
 
-                if (n.X >= 0 && n.X < sizeX && n.Y >= 0 && n.Y < sizeY) {
+                if (n.X >= 0 && n.X < gState.sizeX && n.Y >= 0 && n.Y < gState.sizeY) {
                     board[i][j].Neighbors.set(dir, board[n.X][n.Y]);
                 }
             }
