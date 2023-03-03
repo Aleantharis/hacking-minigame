@@ -482,12 +482,16 @@ export class TileSerializer {
                 });
 
                 ret.OpenEdges = e;
+                break;
             case "P":
                 ret = new PowerTile(tile.X, tile.Y, gState);
+                break;
             case "G": 
                 ret = new GoalTile(tile.X, tile.Y, gState);
+                break;
             case "T":
                 ret = new TrapTile(tile.X, tile.Y, gState);
+                break;
             case "R":
                 ret = new RotatingTile(tile.X, tile.Y, gState);
                 var e = [];
@@ -497,6 +501,7 @@ export class TileSerializer {
                 });
 
                 ret.OpenEdges = e;
+                break;
 
         }
 
