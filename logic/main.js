@@ -165,7 +165,7 @@ function drawFailure() {
 }
 
 function drawGenerating() {
-	draw();
+	drawBackground();
 	drawTransparentOverlay();
 
 	drawDialog("Initializing BREACH Protocol", "", "Please wait...", "goldenrod");
