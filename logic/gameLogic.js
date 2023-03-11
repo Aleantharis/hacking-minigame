@@ -61,7 +61,7 @@ export class GameLogic {
         let gen = new PathGenerator(sizeX, sizeY, this.#powX, this.#powY, sizeX - this.#powX - 1, sizeY - this.#powY - 1);
 
         // path has been generated  now fill up path with random tiles (apply fixedtile percentage) - generate in "correct" orientation, then rotate them randomly
-        path = gen.generate();
+        let path = gen.generate();
 
         var maxFixedTiles = Math.round(sizeX * sizeY * GameLogic.difficultyValues[difficulty].fixedTilePercentage);
 
