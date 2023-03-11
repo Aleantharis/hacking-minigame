@@ -56,7 +56,7 @@ export class GameLogic {
     }
 
     #pathGenCreateBoard(difficulty, sizeX, sizeY) {
-        gen = new PathGenerator(sizeX, sizeY, this.powX, this.powY, sizeX - this.powX - 1, sizeY - this.powY - 1);
+        let gen = new PathGenerator(sizeX, sizeY, this.powX, this.powY, sizeX - this.powX - 1, sizeY - this.powY - 1);
 
         // path has been generated  now fill up path with random tiles (apply fixedtile percentage) - generate in "correct" orientation, then rotate them randomly
         path = gen.generate();
