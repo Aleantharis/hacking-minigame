@@ -6,6 +6,8 @@
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import
 
 import { Directions, Tile, RotatingTile, GoalTile, TrapTile, PowerTile, DifficultySettings, GameState, TileSerializer } from "./tiles.js"
+import { PathGenerator } from "./randomPathGenerator.js";
+
 
 export class GameLogic {
     static difficultyValues = {
@@ -25,7 +27,14 @@ export class GameLogic {
         this.gameState = new GameState(difficulty, sizeX, sizeY, -1, -1, DEBUG);
         this.gameOverTrigger = gameOverTrigger;
 
-        this.#createBoard(difficulty, sizeX, sizeY);
+
+        if (DEBUG) {
+            this.#pathGenCreateBoard(difficulty, sizeX, sizeY);
+        }
+        else {
+            this.#bruteForceCreateBoard(difficulty, sizeX, sizeY);
+        }
+
 
         // if(!DEBUG) {
         //     while ((!CircuitBoardVerifier.verify(this.circuitBoard, this.#powX, this.#powY))) {
@@ -46,7 +55,60 @@ export class GameLogic {
         this.gameState.trapPowered = false;
     }
 
-    #createBoard(difficulty, sizeX, sizeY) {
+    #pathGenCreateBoard(difficulty, sizeX, sizeY) {
+        gen = new PathGenerator(sizeX, sizeY, this.powX, this.powY, sizeX - this.powX - 1, sizeY - this.powY - 1);
+
+        // path has been generated  now fill up path with random tiles (apply fixedtile percentage) - generate in "correct" orientation, then rotate them randomly
+        path = gen.generate();
+
+        this.#initBoard(sizeX, sizeY);
+
+        var maxFixedTiles = Math.round(sizeX * sizeY * GameLogic.difficultyValues[difficulty].fixedTilePercentage);
+
+        for (let i = 1; i < path.length - 1; i++) {
+            var dirToParent = Directions.inverse(Directions.getDirectionFromCoordinateDiff(path[i].X - path[i - 1].X, path[i].Y - path[i - 1].Y));
+            var dirToChild = Directions.getDirectionFromCoordinateDiff(path[i + 1].X - path[i].X, path[i + 1].Y - path[i].Y);
+
+            var temp;
+            // generate fixed tile if rng allows for it
+            if (maxFixedTiles-- > 0 && Math.random() <= GameLogic.difficultyValues[difficulty].fixedTilePercentage) {
+                temp = new Tile(path[i].X, path[i].Y, this.gameState);
+            }
+            else {
+                temp = new RotatingTile(path[i].X, path[i].Y, this.gameState);
+            }
+
+            temp.OpenEdges.push(dirToParent);
+            temp.OpenEdges.push(dirToChild);
+
+            // randomly add a third direction 
+            if (Math.floor(Math.random() * 100) < 15) {
+                var edge = Directions.getRandomMissingDirection(temp.OpenEdges);
+                temp.OpenEdges.push(edge);
+            }
+
+            // randomly rotate tile
+            var rotations = Math.floor(Math.random() * 4);
+            for (let j = 0; j <= rotations; j++) {
+                temp.clickTrigger();
+            }
+
+            this.circuitBoard[path[i].X][path[i].Y] = temp;
+        }
+
+        //fill up rest of board with random tiles (apply trap percentage)
+        this.#fillBoardWithTiles(difficulty, sizeX, sizeY, maxFixedTiles);
+    }
+
+    #bruteForceCreateBoard(difficulty, sizeX, sizeY) {
+        this.#initBoard(sizeX, sizeY);
+
+        var maxFixedTiles = Math.round(sizeX * sizeY * GameLogic.difficultyValues[difficulty].fixedTilePercentage);
+
+        this.#fillBoardWithTiles(difficulty, sizeX, sizeY, maxFixedTiles);
+    }
+
+    #initBoard(sizeX, sizeY) {
         // init game board
         this.circuitBoard = Array.from(Array(sizeX), () => new Array(sizeY));
 
@@ -79,9 +141,9 @@ export class GameLogic {
 
         this.circuitBoard[this.#powX][this.#powY] = powerTile;
         this.circuitBoard[goalTile.X][goalTile.Y] = goalTile;
+    }
 
-        var maxFixedTiles = Math.round(sizeX * sizeY * GameLogic.difficultyValues[difficulty].fixedTilePercentage);
-
+    #fillBoardWithTiles(difficulty, sizeX, sizeY, maxFixedTiles) {
         // Init Rest of tiles
         for (let i = 0; i < sizeX; i++) {
             for (let j = 0; j < sizeY; j++) {
@@ -181,3 +243,6 @@ export class GameLogic {
     }
 }
 
+
+// https://stackoverflow.com/questions/34954652/java-algorithm-for-generating-random-path-in-2d-char-array
+// https://www.google.com/search?q=generate+random+path+from+a+to+b+in+2d+coordinate+system&oq=generate+random+path+from+a+to+b+in+2d+coordinate+system&aqs=chrome..69i57.9451j0j1&sourceid=chrome&ie=UTF-8

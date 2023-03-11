@@ -81,6 +81,38 @@ export class Directions {
     static getRandom() {
         return Directions.getByIndex(Math.floor(Math.random() * 4));
     }
+
+    static getNeighborCoordinates(direction, x, y) {
+        switch (direction.name) {
+            case "up":
+                return { X: (x), Y: (y - 1) };
+            case "right":
+                return { X: (x + 1), Y: (y) };
+            case "down":
+                return { X: (x), Y: (y + 1) };
+            case "left":
+                return { X: (x - 1), Y: (y) };
+            default:
+                throw new Error("Invalid Direction");
+        }
+    }
+
+    static getDirectionFromCoordinateDiff(diffX, diffY) {
+        switch(diffX) {
+            case 0:
+                return diffY > 0 ? Directions.Down : Directions.Up;
+            case 1: 
+                if(diffY !== 0) {
+                    throw new Error("Invalid Coordinate diff!");
+                }
+                return Directions.Right;
+            case -1:
+                if(diffY !== 0) {
+                    throw new Error("Invalid Coordinate diff!");
+                }
+                return Directions.Left;
+        }
+    }
 }
 
 
@@ -152,18 +184,7 @@ export class Tile {
     }
 
     getNeighborCoordinates(direction) {
-        switch (direction.name) {
-            case "up":
-                return { X: (this.X), Y: (this.Y - 1) };
-            case "right":
-                return { X: (this.X + 1), Y: (this.Y) };
-            case "down":
-                return { X: (this.X), Y: (this.Y + 1) };
-            case "left":
-                return { X: (this.X - 1), Y: (this.Y) };
-            default:
-                throw new Error("Invalid Direction");
-        }
+        return Directions.getNeighborCoordinates(direction, this.X, this.Y);
     }
 
     // Triggered by neighbor
