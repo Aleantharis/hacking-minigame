@@ -39,12 +39,16 @@ export class PathGenerator {
         throw new Error("No valid path found!");
     }
 
+    #distanceDiff(curX, curY, nextX, nextY) {
+        return Math.hypot(this.goalX - curX, this.goalY - curY) - Math.hypot(this.goalX - nextX, this.goalY - nextY);
+    }
+
     #possibleDirections(curX, curY) {
         var ret = [];
 
         for (let i = 0; i < 4; i++) {
             var dir = Directions.getNeighborCoordinates(Directions.getByIndex(i), curX, curY);
-            if (dir.X >= 0 && dir.Y >= 0 && dir.X < this.sizeX && dir.Y < this.sizeY && this.protoBoard[dir.X][dir.Y] === undefined) {
+            if (dir.X >= 0 && dir.Y >= 0 && dir.X < this.sizeX && dir.Y < this.sizeY && this.protoBoard[dir.X][dir.Y] === undefined && this.#distanceDiff(curX, curY, dir.X, dir.Y) >= 0) {
                 ret.push(dir);
             }
         }
