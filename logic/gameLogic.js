@@ -76,7 +76,7 @@ export class GameLogic {
         }
 
         //fill up rest of board with random tiles (apply trap percentage)
-        this.#fillBoardWithTiles(difficulty, sizeX, sizeY, maxFixedTiles);
+        this.#fillBoardWithTiles(difficulty, sizeX, sizeY, maxFixedTiles, path);
     }
 
     #bruteForceCreateBoard(difficulty, sizeX, sizeY) {
@@ -84,7 +84,7 @@ export class GameLogic {
 
         var maxFixedTiles = Math.round(sizeX * sizeY * GameLogic.difficultyValues[difficulty].fixedTilePercentage);
 
-        this.#fillBoardWithTiles(difficulty, sizeX, sizeY, maxFixedTiles);
+        this.#fillBoardWithTiles(difficulty, sizeX, sizeY, maxFixedTiles, []);
     }
 
     #initBoard(sizeX, sizeY) {
@@ -122,7 +122,7 @@ export class GameLogic {
         this.circuitBoard[goalTile.X][goalTile.Y] = goalTile;
     }
 
-    #fillBoardWithTiles(difficulty, sizeX, sizeY, maxFixedTiles) {
+    #fillBoardWithTiles(difficulty, sizeX, sizeY, maxFixedTiles, skipTiles) {
         // Init Rest of tiles
         for (let i = 0; i < sizeX; i++) {
             for (let j = 0; j < sizeY; j++) {
@@ -169,10 +169,13 @@ export class GameLogic {
         var possibleTrapCoords = [];
         for (let i = 0; i < sizeX; i++) {
             for (let j = 0; j < sizeY; j++) {
-                if (!(this.circuitBoard[i][j] instanceof GoalTile) &&
-                    !(this.circuitBoard[i][j] instanceof PowerTile) &&
-                    Array.from(this.circuitBoard[i][j].Neighbors.values()).filter((n) => n !== null && n.OpenEdges.length > 3).length === 0) {
-                    possibleTrapCoords.push({ X: i, Y: j });
+                // dont generate traps on solved path
+                if (!this.#inPathArray(skipTiles, i, j)) {
+                    if (!(this.circuitBoard[i][j] instanceof GoalTile) &&
+                        !(this.circuitBoard[i][j] instanceof PowerTile) &&
+                        Array.from(this.circuitBoard[i][j].Neighbors.values()).filter((n) => n !== null && n.OpenEdges.length > 3).length === 0) {
+                        possibleTrapCoords.push({ X: i, Y: j });
+                    }
                 }
             }
         }
@@ -219,6 +222,16 @@ export class GameLogic {
                 debug: this.gameState.DEBUG
             }
         };
+    }
+
+
+    #inPathArray(arr, x, y) {
+        for (let i = 0; i < arr.length; i++) {
+            if (arr[i].X === x && arr[i].Y === y) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 
