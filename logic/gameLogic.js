@@ -27,28 +27,7 @@ export class GameLogic {
         this.gameState = new GameState(difficulty, sizeX, sizeY, -1, -1, DEBUG);
         this.gameOverTrigger = gameOverTrigger;
 
-
-        if (DEBUG) {
-            this.#pathGenCreateBoard(difficulty, sizeX, sizeY);
-        }
-        else {
-            this.#bruteForceCreateBoard(difficulty, sizeX, sizeY);
-        }
-
-
-        // if(!DEBUG) {
-        //     while ((!CircuitBoardVerifier.verify(this.circuitBoard, this.#powX, this.#powY))) {
-        //         this.#createBoard(difficulty, sizeX, sizeY);
-        //     }
-        // }
-
-        // since this copy shit obviously doesnt want o fucking work, 
-        // try a different approach, generating a path from power->goal first, then fill up rest of tiles (still not allowing traps near 4-edge tiles),
-        // then spin all rotatingtiles 1-3 times randomly
-
-        // i do not understand why in the name of cthulhu, we still have references back to the original object.....
-        // like seriousyl i create new objects for everything, new arrays, etc.
-        // and still the original grid gets rotated around during verification
+        this.#pathGenCreateBoard(difficulty, sizeX, sizeY);
 
         this.gameState.boardPowered = false;
         this.gameState.goalPowered = false;
