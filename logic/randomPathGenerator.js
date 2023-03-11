@@ -41,7 +41,7 @@ export class PathGenerator {
 
     #possibleDirections(curX, curY) {
         var ret = [];
-        
+
         for (let i = 0; i < 4; i++) {
             var dir = Directions.getNeighborCoordinates(Directions.getByIndex(i), curX, curY);
             if(dir.X > 0 && dir.Y > 0 && dir.X < this.sizeX && dir.Y < this.sizeY && this.protoBoard[dir.X][dir.Y] === undefined){
@@ -62,12 +62,13 @@ export class PathGenerator {
             return true;
         }
 
-        // randomly walk to possible directions
-        this.#possibleDirections(curX, curY).forEach(dir => {
+        var dirs = this.#possibleDirections(curX, curY);
+        for (let i = 0; i < dirs.length; i++) {
+            var dir = dirs[i];
             if(this.#generateRec(dir.X, dir.Y, curX, curY, path)) {
                 return true;
             }
-        });
+        }
 
         // if no walkable paths were discovered recursively, rollback current tile
         this.protoBoard[curX][curY] = undefined;
