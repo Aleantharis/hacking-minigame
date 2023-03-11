@@ -41,8 +41,9 @@ export class PathGenerator {
 
     #possibleDirections(curX, curY) {
         var ret = [];
-        for(var direction in [Directions.Up, Directions.Right, Directions.Down, Directions.Left]) {
-            var dir = Directions.getNeighborCoordinates(direction, curX, curY);
+        
+        for (let i = 0; i < 4; i++) {
+            var dir = Directions.getNeighborCoordinates(Directions.getByIndex(i), curX, curY);
             if(dir.X > 0 && dir.Y > 0 && dir.X < this.sizeX && dir.Y < this.sizeY && this.protoBoard[dir.X][dir.Y] === undefined){
                 ret.push(dir);
             }
