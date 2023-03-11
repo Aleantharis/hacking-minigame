@@ -9,7 +9,7 @@ export class PathGenerator {
     goalY;
     protoBoard;
     gameState;
-    
+
     constructor(sizeX, sizeY, startX, startY, goalX, goalY) {
         this.sizeX = sizeX;
         this.sizeY = sizeY;
@@ -27,12 +27,12 @@ export class PathGenerator {
         // this.protoBoard[startX][startY] = powerTile;
         // this.protoBoard[goalX][goalY] = goalTile;
     }
-    
-    
+
+
     generate() {
         var ret = [];
 
-        if(this.#generateRec(this.startX, this.startY, -1, -1, ret)) {
+        if (this.#generateRec(this.startX, this.startY, -1, -1, ret)) {
             return ret;
         }
 
@@ -44,7 +44,7 @@ export class PathGenerator {
 
         for (let i = 0; i < 4; i++) {
             var dir = Directions.getNeighborCoordinates(Directions.getByIndex(i), curX, curY);
-            if(dir.X >= 0 && dir.Y >= 0 && dir.X < this.sizeX && dir.Y < this.sizeY && this.protoBoard[dir.X][dir.Y] === undefined){
+            if (dir.X >= 0 && dir.Y >= 0 && dir.X < this.sizeX && dir.Y < this.sizeY && this.protoBoard[dir.X][dir.Y] === undefined) {
                 ret.push(dir);
             }
         }
@@ -55,18 +55,21 @@ export class PathGenerator {
 
     #generateRec(curX, curY, prevX, prevY, path) {
         // add current position to path
-        path.push({X:curX, Y:curY});
+        path.push({ X: curX, Y: curY });
         this.protoBoard[curX][curY] = 'O';
 
-        if(curX === this.goalX && curY === this.goalY) {
+        if (curX === this.goalX && curY === this.goalY) {
             return true;
         }
 
-        var dirs = this.#possibleDirections(curX, curY);
-        for (let i = 0; i < dirs.length; i++) {
-            var dir = dirs[i];
-            if(this.#generateRec(dir.X, dir.Y, curX, curY, path)) {
-                return true;
+        // sanity check - if path is >= amount of tiles then stop
+        if (path.length < (this.sizeX * this.sizeY) / 2) {
+            var dirs = this.#possibleDirections(curX, curY);
+            for (let i = 0; i < dirs.length; i++) {
+                var dir = dirs[i];
+                if (this.#generateRec(dir.X, dir.Y, curX, curY, path)) {
+                    return true;
+                }
             }
         }
 
