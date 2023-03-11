@@ -11,9 +11,9 @@ import { PathGenerator } from "./randomPathGenerator.js";
 
 export class GameLogic {
     static difficultyValues = {
-        0: new DifficultySettings(0.35, 0),
-        1: new DifficultySettings(0.50, 0.1),
-        2: new DifficultySettings(0.60, 0.2)
+        0: new DifficultySettings(0.20, 0),
+        1: new DifficultySettings(0.35, 0.1),
+        2: new DifficultySettings(0.40, 0.2)
     }
 
     circuitBoard;
